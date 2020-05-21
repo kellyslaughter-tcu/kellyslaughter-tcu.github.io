@@ -144,6 +144,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
             <section class="normal" id="section-">
 <div id="txt" class="section level1">
 <h1><span class="header-section-number">3</span> Text Analysis</h1>
+    <h5><a href="03-text_analysis.Rmd" class="uri">This file in rmd form</a></h5>
 <p>In this chapter we will perform simple text analysis - count and sentiment by word. Detailed guidance for text mining is provided at <a href="https://www.tidytextmining.com/tidytext.html">Text Mining with R</a><span class="citation">(Xie <a href="#ref-xie2020">2020</a><a href="#ref-xie2020">a</a>)</span>. We first need to tokenize the text (i.e., break the text apart into smaller units for analysis). We will tokenize by word. Instead of tokenizing by word, you can tokenize by n-gram, e.g., pairs, triplets, etc. of words via <code>vacation_tweets_tt2 &lt;- vacation_tweets_df %&gt;% unnest_tokens(bigram, text, token = &quot;ngrams&quot;, n = 2)</code>. We will use the command <code>unnest_tokens</code> from the <code>tidytext</code><span class="citation">(Robinson and Silge <a href="#ref-R-tidytext">2020</a>)</span> package to do our work.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidytext)
 

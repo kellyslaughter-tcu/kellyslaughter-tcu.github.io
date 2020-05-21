@@ -1,0 +1,288 @@
+---
+title: "knn in R"
+output: html_document
+---
+# Obtaining External Data {#data}
+
+We examine economic and social measures that vary with the price of gold. We speculate that good economic information results in lower gold prices and vice versa, under the premise that gold is seen as a store of value in uncertain times. We track changes in the price of gold to changes in the daily price of Tripwire (as unexpected economic news may curtail or encourage travel), monthly unemployment insurance, Tweets about vacations, and Reddit posts from the Stock Picks subreddit that reference the term 'gold.' To obtain this data via:
+
+* The R package `Quandl`[@R-Quandl] for commodity data (i.e., gold prices)
+* The R package `quantmod`[@R-quantmod] for stock data (i.e., Tripwire)
+* The R package `rtweet`[@R-rtweet] for Twitter data and the R package `RedditExtractoR`[@R-RedditExtractoR] for Reddit data
+* The R package `httr`[@R-httr] for the Bureau of Economic Analysis data (i.e., unemployment insurance)
+
+Other sources of data 'friendly' to R can be found at [ComputerWorld R Packages for Data] (https://www.computerworld.com/article/3109890/these-r-packages-import-sports-weather-stock-data-and-more.html). 
+
+Other general sources of data available through API's can be found at https://www.programmableweb.com/apis/directory.  
+
+##Financial Data
+<hr> 
+###Commodity Prices
+
+Quandl is one of the most popular data sources that offers an API for data. Data sources available via API include:[Commodity Prices](https://blog.quandl.com/api-for-commodity-data), [Stock Prices](https://blog.quandl.com/api-for-stock-data), [Currency Prices](https://blog.quandl.com/api-for-currency-data), and [Bitcoin](https://blog.quandl.com/api-for-bitcoin-data)
+
+Create an account at https://www.quandl.com/sign-up if you plan on using Quandl calls more than fifty times a day - Quandl will provide an API key. 
+
+We use the function `Quandl` available after the `Quandl` library is loaded to obtain gold prices from April 15 to the most recent date. Note that the api_key is set to `Sys.getenv("QUANDL_KEY")`. It is bad practice to include the key in the code, so I have loaded the API key provided by Quandl into a systems variable stored in the project file `.Renviron` and retrieve it for use from the systems variables. `.Renviron` can be maintained via the `usethis` package using the command `usethis::edit_r_makevars()`).
+
+_Warning: Most API's have limits for use (by frequency, volume, rows, etc.). Sometimes your data will not appear to change after calls due to this limitation._
+
+```{r Obtain-Gold-Data, message = FALSE}
+
+library(Quandl)      
+
+London_Gold_AM = Quandl("LBMA/GOLD", start_date="2020-04-15", api_key = Sys.getenv("QUANDL_KEY"))
+
+```
+
+The data is returned in the form of a data frame, which is suitable for most uses in R.The financial data is then displayed in the Table \@ref(tab:Gold-Data-Table). 
+
+```{r Gold-Data-Table, echo = FALSE, results = 'asis'}
+
+library(knitr)
+
+kable(head(London_Gold_AM), caption = "First Few Rows of Financial Data Set Quandl")
+
+```
+
+###Stock Prices
+
+We will use the `quantmod` R package to retrieve stock price data. We pass the stock price symbols and data ranges to Yahoo which returns the financial data. In our case, we ask for S&P 500, Kelly Temp Services, Tripwire, and GrubHub stock prices from fifteen days (`Sys.Date() - 15`) ago to today (`Sys.Date()`).
+No API key is required. Note that `quantmod` relies on additional R packages - R will download these for us automatically.
+
+```{r Obtain-Financial-Data, message = FALSE, warning = FALSE}
+
+library(quantmod)      # retrieve financial data (used for function via getSymbols) (masks as.Date from base R) 
+
+stock_data <- getSymbols(c("^GSPC", "KELYA", "TRIP", "GRUB"), # KELYA = Kelly Services, TRIP = Trip Advisor, GRUB = Grubhub
+                         src = 'yahoo', 
+                         from = (Sys.Date() - 15),
+                         to = Sys.Date()) 
+
+```
+
+Unlike the data returned via `Quandl`, the data returned from `quantmod` needs some manipulation to be ready for use. As we asked for four different prices, `quantmod` returned a structure with four sets of data nested within. Execute the command `head(stock_data)` in the Console to see the four structures' names. 
+
+We will load three libraries - `dplyr`[@R-dplyr], `broom`[@R-broom], and `tidyr`[@R-tidyr] - that will allow us to extract and manipulate the data into a form usable for analysis. We first pull the Tripwire data from the `stock_data` structure via the `tidy` command, then convert the data from a 'long' format to a 'wide' format via the `spread` command.
+
+```{r Reformat-Financial-Data, message = FALSE, warning = FALSE}
+
+library(broom)   # tidy function
+library(tidyr)   # spread function
+
+TRIP_tidy <- tidy(TRIP) # tidy from broom package converts list to "long" data frame for DJI 
+
+TRIP_wide <- spread(TRIP_tidy, series, value) # spread from tidyr; converts long to wide using series values for new columns; that is, turn series row values to new columns
+
+```
+
+We want to explore not the absolute price of Tripwire stock on a given day but the difference between its high and low price. We will need a new variable we will call `Trip.Diff` (to stay consistent with the naming convention of `quantmod`) and add this new variable to the data set via the `mutate` function provided through the `dplyr` package.
+
+```{r Create-Trip.Diff, message = FALSE, warning = FALSE}
+
+library(dplyr)   # for mutate function (may already be loaded, but loading twice will not create an error)
+
+# The change in price during the day may be of interest
+TRIP_wide <- TRIP_wide %>% mutate(TRIP.Diff = TRIP.High - TRIP.Low)
+
+```
+
+The first few rows of the Tripwire data are displayed in Table \@ref(tab:Tripwire-Data-Table) as rendered through the package `knitr`[@R-knitr]. 
+
+```{r Tripwire-Data-Table, echo = FALSE, results = 'asis'}
+
+library(knitr) # You do not need to reload packages for use in each chunk
+
+kable(head(TRIP_wide), caption = "First Few Rows of Financial Data Set")
+
+```
+
+
+##Social Media Data
+<hr> 
+
+###Twitter
+
+Twitter requires registration in the form of an 'application' to use its API. Tweets that are public and can be searched via an API by keyword or account. Twitter does impose restrictions on the API use, e.g., limiting the number of calls per minute and the number of tweets returned.
+
+Twitter uses [OAuth 1.0 tokens](https://en.wikipedia.org/wiki/OAuth) for authorization. You will need a consumer key, a consumer secret, an access token, and an access secret (basically, you need five character strings). Set up instructions can be found at https://cran.r-project.org/web/packages/rtweet/vignettes/auth.html. 
+
+We will use the command `search_tweets` via the `rtweet` package to retrieve Twitter data by keywords. If you select a very broad term for search (e.g., "election") you might only retrieve data from the last few hours. If you select a more obscure term (e.g., "kakorrhaphiophobia") you still can only retrieve Tweets up to seven days old when using the free Twitter account. 
+
+We first set parameter values for the call to `search_tweets`, using the same technique for loading the token values, setting the search string to _Caribbean_ and / or _vacation_, and limit the number of returned tweets to 1,000. The data returned is accessible through the `vacation_tweets` variable.
+
+```{r Obtain-Social-Data-by-Keywords, message = FALSE, warning = FALSE}
+
+library(httpuv) # for browser based twitter authentication
+library(rtweet) 
+
+twitter_token <- create_token(
+   app = Sys.getenv("TWITTER_app"),
+   consumer_key = Sys.getenv("TWITTER_consumer_key"),
+   consumer_secret = Sys.getenv("TWITTER_consumer_secret"),
+   access_token = Sys.getenv("TWITTER_access_token"),
+   access_secret = Sys.getenv("TWITTER_access_secret"))
+
+tweet_search_string <- 'Caribbean vacation ' # space for AND; this string also for hashtag terms and can include logic such as min_retweets:50 to return tweets that were retweeted a least 50 times
+Kmax_number_of_tweets = 1000 # Up to 18,000
+
+vacation_tweets <- search_tweets(
+  q = tweet_search_string, 
+  n = Kmax_number_of_tweets, # Up to 18000 every 15 minutes
+  include_rts = FALSE, # Retweets = tweet generated by "retweet" (recycle arrows), not quotes entering "RT" into text of one's tweets
+  lang = "en", # language: BCP 47 language identifier
+  geocode = lookup_coords("usa"), # for geo enabled tweets, most tweets do not include a geo code
+#  since = from,
+#  until = Sys.Date(),
+  retryonratelimit = FALSE) # If ask for > 18k if TRUE, will wait and resend request when eligible for next batch
+
+```
+
+The Twitter API returns dozens of fields as shown below. While we will concentrate only on the actual tweet text, other fields that might be of interest is the number of retweets or the number of account followers. 
+
+```{r Twitter-Fields-Returned, message = FALSE, warning = FALSE}
+
+names(vacation_tweets)
+
+```
+
+For convenience, we will pull the fields `created_at`, `text`, `favorite_count`, and `retweet_count` into another data set - `vacation_tweets_df`.
+```{r Reformat-Social-Data, message = FALSE, warning = FALSE }
+
+#vacation_tweets_df$europe <- grepl(" Europe ", rt$text, ignore.case = TRUE) # flag to indicate text include term 'Europe'
+vacation_tweets_df <- tibble(created_at = vacation_tweets$created_at, 
+                                 text = vacation_tweets$text, 
+                                 favorite_count = vacation_tweets$favorite_count, 
+                                 retweet_count = vacation_tweets$retweet_count) # tibble keeps the text from defaulting to factor
+
+
+```
+
+Twitter also allows searches by account via the command `get_timeline`. In the code below (which is not executred), tweets sent by the news service _Business Wire_ would be captured and added to the `vacation_tweets_df`.
+
+```{r Obtain-Social-Data-by-User, eval = FALSE}
+
+NewsFromBW_tweets <- get_timeline("NewsFromBW", n = Kmax_number_of_tweets)
+NewsFromBW_tweets_df <- data.frame(created_at = NewsFromBW_tweets$created_at, text = NewsFromBW_tweets$text, favorite_count = NewsFromBW_tweets$favorite_count, retweet_count = NewsFromBW_tweets$retweet_count)
+
+vacation_tweets_df$source <- "General"
+NewsFromBW_tweets_df$source <- "NewsFromBW"
+
+vacation_tweets_df <- rbind(NewsFromBW_tweets_df, vacation_tweets_df)
+vacation_tweets_df$text <- gsub(" Caribbean", "<span class='searchterms'> contract</span>", vacation_tweets_df$text)
+
+
+```
+
+The first few rows of the Twitter data are displayed below. Caution: The Twitter text may include characters R will interpret as escape characters which may adversely affect the bookdown generation.
+
+```{r Twitter-Social-Media-Table, echo = FALSE, message = FALSE, warning = FALSE}
+
+# kable(head(vacation_tweets_df, 1), caption = "First Few Rows of Social Media Data Set - Twitter", tidy = FALSE)
+head(vacation_tweets_df)
+
+```
+
+<font size="2">_No values appearing in the 'favorite_count' and 'retweet_count' may indicate values of zero_</font>
+
+###Reddit
+
+Reddit does not require an API key. Using the function `get_reddit` from the package `RedditExtractoR`, we will obtain posts from the rubReddit _stock picks_, searching by the terms _gold_ and _a few other terms _silver_. 
+
+```{r Obtain-Social-Data-Reddit, message = FALSE, warning = FALSE}
+
+library(RedditExtractoR)
+   
+reddit_data = get_reddit(search_terms = "gold silver", subreddit = "stock_picks", sort_by = "new") # returns text as chr, not factor
+
+```
+
+The first few rows of the Reddit results are displayed below. 
+
+```{r Reddit-Social-Media-Table, echo = FALSE, message = FALSE, warning = FALSE}
+
+#kable(head(reddit_data[,c("comment")], 1), caption = "First Few Rows of Social Media Data Set - Reddit", tidy = FALSE)
+head(reddit_data[,c("comment")])
+
+```
+
+
+##Economic Data
+<hr> 
+
+###Unemployment Insurance
+
+While an R `BEA` package exists for pulling data, I have had some issues using it (it has not been updated in a couple of years; meanwhile, the public sites offering data undergo frequent updates). So instead we will use a more generic solution, a RESTful pull via the R `httr` package (supporting cURL-like access to sites). We will 'ask' that the data is returned in a JSON (vs XML), a format that will need to be changed for use in R. Accordingly, we will use the R package `jsonlite` to convert the data into a wide format called a data frame or tibble. The documentation for the packages can be found at:
+
+* https://cran.r-project.org/web/packages/httr/
+* https://cran.r-project.org/web/packages/jsonlite
+
+The BEA data is available free of charge, but to registered users. Thus you will need to provide the unique key assigned to you by BEA as described at https://apps.bea.gov/API/signup/index.cfm. 
+
+BEA methodologies can be found at https://www.bea.gov/resources/methodologies/nipa-handbook. A description of the data available can be found at https://apps.bea.gov/api/_pdf/bea_web_service_api_user_guide.pdf starting at page 16. The data set categories can be found at https://www.bea.gov/open-data).
+
+In the example provided below, we will obtain data from the _NIPA_ database and store it in the variable called `BEA_response`. We check the return code hoping for a _200_, which indicates the technical transaction was successful, but that does not necessarily mean data was returned.
+
+```{r Obtain-Economic-Data, , message = FALSE, warning = FALSE}
+
+library(httr) # Normmally I would load all packages in a single chunk at the begiining of the notebook
+
+# Retrieve my BEA API Key stored in .Renviron project file
+BEA_API_Key <- Sys.getenv("BEA_KEY") 
+
+# Set parameter values for call
+BEA_Data_Set_Name <- "NIPA" # also "NIUnderlingDetail", "FixedAssets", "MNE", "GDPbyIndustry", "ITA" , "IIP", "InputOutput" , "UnderlyingGDPbyIndustry"
+BEA_Table_Name <- "T20600" # Table T20600, Line 21 is Unemployment Insurance
+BEA_Year <- "2020"
+BEA_Frequency = "M" # A = Annual, Q = Quarterly, M = Monthly - can use combination
+BEA_Results_Type <- "JSON"
+
+# BEA_Data_Set_Name <- "NIUnderlyingDetail" 
+# BEA_Table_Name <- "U70205S" # Line 12 is Truck Sales
+
+BEA_string <- paste0("https://apps.bea.gov/api/data/?&UserID=", 
+                     BEA_API_Key, 
+                     "&method=GetData", 
+                     "&DataSetName=", BEA_Data_Set_Name, 
+                     "&TableName=", BEA_Table_Name, 
+                     "&Frequency=", BEA_Frequency,
+                     "&Year=", BEA_Year, 
+                     "&ResultFormat=", BEA_Results_Type) # The parameters TableName, Frequency, and Year are required for the NIPA data sets. Other BEA data sets may require different parameters
+
+
+BEA_response <- GET(BEA_string) # GET passes the string we created to the BEA web site. THe data set results returned are placed into the BEA_response variable
+
+http_status(BEA_response) # We Want code 200, which indicates successfull technical call, but not that data was returned
+
+```
+
+Now we reformat the JSON data to a form usable by most R packages.
+
+```{r Reformat-Economic-Data, message = FALSE, warning = FALSE}
+
+library(jsonlite)
+
+BEA_response_content <- content(BEA_response, "text") # the content command 'is'pulls' the data from results
+
+BEA_response_struct <- fromJSON(BEA_response_content) # Convert the JSON into a table-like format
+
+# THe BEA_response_struct variable is an elaborate structure that includes data and metadata (use the command str(BEA_response_struct) to see the structure). We just want to data. So we reference the data into a new variable.
+BEA_tibble <- tibble(BEA_response_struct$BEAAPI$Results$Data) # Capture only the part of the table we want
+
+```
+
+Table _T20600_ from the _NIPA_ database includes a number of variables. We will pull the unemployment insurance (designated by`LineNumber = 21`) into a new variable called `BEA_tibble_unemployment_ins`.
+
+```{r Extract-Unemployment-Insurance-Data, message = FALSE, warning = FALSE}
+
+BEA_tibble_unemployment_ins <- filter(BEA_tibble, LineNumber == 21) # Unemployment Insurance, filter is a dplyr function
+
+```
+
+The first few rows of the BEA results are displayed in Table \@ref(tab:Economic-Data-Table). 
+
+```{r Economic-Data-Table, echo = FALSE, results = 'asis'}
+
+kable(head(BEA_tibble_unemployment_ins), caption = "First Few Rows of Economic Data Set")
+
+```

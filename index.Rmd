@@ -1,0 +1,87 @@
+--- 
+title: "Neeley BIS Data Science Competition<br/>Summer 2020"
+author: "Kelly T Slaughter"
+date: "`r Sys.Date()`"
+site: bookdown::bookdown_site
+output: bookdown::gitbook
+documentclass: book
+bibliography: [book.bib, packages.bib]
+biblio-style: apalike
+link-citations: yes
+github-repo: kellyslaughter-tcu/BIS-Data-Science-Competition-2020
+description: "Data Science Competition, 2020."
+---
+
+# Overview {#intro}
+
+Welcome to the inaugural Neeley BIS Data Science Competition! Teams and individuals will research relationships between social media and economic or financial metrics and present the findings visually. The social media content may be related to a (set of) persons or terms. The economic data may be consumer spending and borrowing, stock prices, manufacturing output, etc. Competitors may want to first brainstorm about the relationships they are seeking to uncover, informally examine the relationships to see if anything of interest exists, then develop a plan for developing the more rigorous analysis and supporting documents.
+
+In this online book, I will share a 'fake' example of an entry. The code behind each chapter will be explained in our Zoom meetings as documented in Table \@ref(tab:Meeting-Table). 
+
+```{r Meeting-Table, echo = FALSE, message = FALSE, warning = FALSE}
+
+library(dplyr)
+library(knitr)
+
+meeting_table <- tibble(Date = c(as.Date("05/21/2020", "%m/%d/%y"),
+                                     as.Date("05/28/2020", "%m/%d/%y"),
+                                     as.Date("06/04/2020", "%m/%d/%y"),
+                                     as.Date("06/11/2020", "%m/%d/%y"),
+                                     as.Date("06/18/2020", "%m/%d/%y"),
+                                     as.Date("07/09/2020", "%m/%d/%y"),
+                                     as.Date("07/16/2020", "%m/%d/%y"),
+                                     as.Date("07/23/2020", "%m/%d/%y")
+                            ),
+                            Topic = c("Kick-off",
+                                      "External Data",
+                                      "Text Analysis",
+                                      "Open",
+                                      "Visualization",
+                                      "Open",
+                                      "Publishing",
+                                      "Open"
+                            ), 
+                            Link = c("https://tcu.zoom.us/j/97403249734",
+                                             "https://tcu.zoom.us/j/97427925678",
+                                             "https://tcu.zoom.us/j/93233516653",
+                                             "https://tcu.zoom.us/j/99538834884",
+                                             "https://tcu.zoom.us/j/94416905185",
+                                             "https://tcu.zoom.us/j/93574469036",
+                                             "https://tcu.zoom.us/j/92745655708",
+                                             "https://tcu.zoom.us/j/98806302340"
+                                             )
+                    )
+
+kable(meeting_table, caption = "Data Science Competition Zoom Meeting Schedule", booktabs = TRUE) # LaTeX package's publication specs
+
+```
+
+<font size="2">_all times are 6:00 PM Central_</font>
+
+The projects should be completed and available for viewing by August 6.
+
+<hr>
+Before the May 28 meeting:
+
+* Download R (https://cran.r-project.org/)
+* Download RStudio (https://rstudio.com/products/rstudio/download/)
+    + Install the tidyverse suite of packages using the command `install.packages("tidyverse")`
+        - Included in the suite is the `ggplot2` package that we will use for visualizations
+* Have one person from your team create an account on GitHub (to use as a host for your final work product)
+* Brainstorm on the type of relationship you want to explore and publish. I will demonstrate how to obtain data from the following sources:
+
+    + Stock price data from Yahoo 
+        - Install the quantmod package via `install.packages("quantmod")` 
+    + Commodity prices for gold from Quandl
+        - Install the quantmod package via `install.packages("Quandl")`
+        - Create an account at https://www.quandl.com/sign-up through which you will be provided an API key
+    + Social media data from Twitter
+        - Install the rtweet package via `install.packages("rtweet")` 
+        - Install the httpuv package via `install.packages("httpuv")` 
+        - Create an account / application as explained at https://cran.r-project.org/web/packages/rtweet/vignettes/auth.html. After creatinging an account, you will have values for an application name, consumer key, consumer secret, access token, and access secret 
+    + Social media data from Reddit\'s Stock Picks subreddit
+        - Install the rtweet package via `install.packages("RedditExtractoR")` 
+    + Economic data from the Bureau of Economic Analysis [BEA] (https://www.bea.gov/)
+        - You will need an API key as explained at https://apps.bea.gov/API/signup/index.cfm.
+        - While there is an R package available for acquiring BEA data, it has not been updated in a couple of years and it appears that a few commands may not be working. So we will use a direct RESTful call (i.e., `GET`) via the httr package via `install.packages("httr")` . Also install the jsonlite package. This package supports the manipulation of external data received as JSON.
+
