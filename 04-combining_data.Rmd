@@ -1,5 +1,7 @@
 # Combining Data {#comb}
 
+<h5>[rmd version of file](04-combining_data.Rmd)</h5> 
+
 The following data sets are now available:
 
 * **London_Gold_AM**: Daily price of gold

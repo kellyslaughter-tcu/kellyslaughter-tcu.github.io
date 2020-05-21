@@ -1,17 +1,15 @@
----
-title: "knn in R"
-output: html_document
----
 # Obtaining External Data {#data}
 
-We examine economic and social measures that vary with the price of gold. We speculate that good economic information results in lower gold prices and vice versa, under the premise that gold is seen as a store of value in uncertain times. We track changes in the price of gold to changes in the daily price of Tripwire (as unexpected economic news may curtail or encourage travel), monthly unemployment insurance, Tweets about vacations, and Reddit posts from the Stock Picks subreddit that reference the term 'gold.' To obtain this data via:
+<h5>[rmd version of file](02-external_data.Rmd)</h5> 
+
+We examine economic and social measures that vary with the price of gold. We speculate that good economic information results in lower gold prices and vice versa, under the premise that gold is seen as a store of value in uncertain times. We track changes in the price of gold to changes in the daily price of Tripwire (as unexpected economic news may curtail or encourage travel), monthly unemployment insurance, Tweets about vacations, and Reddit posts from the Stock Picks subreddit that reference the term 'gold.' We obtain this data via:
 
 * The R package `Quandl`[@R-Quandl] for commodity data (i.e., gold prices)
 * The R package `quantmod`[@R-quantmod] for stock data (i.e., Tripwire)
 * The R package `rtweet`[@R-rtweet] for Twitter data and the R package `RedditExtractoR`[@R-RedditExtractoR] for Reddit data
 * The R package `httr`[@R-httr] for the Bureau of Economic Analysis data (i.e., unemployment insurance)
 
-Other sources of data 'friendly' to R can be found at [ComputerWorld R Packages for Data] (https://www.computerworld.com/article/3109890/these-r-packages-import-sports-weather-stock-data-and-more.html). 
+Other sources of data 'friendly' to R can be found at [ComputerWorld R Packages for Data](https://www.computerworld.com/article/3109890/these-r-packages-import-sports-weather-stock-data-and-more.html). 
 
 Other general sources of data available through API's can be found at https://www.programmableweb.com/apis/directory.  
 

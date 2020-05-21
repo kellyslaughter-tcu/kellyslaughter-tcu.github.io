@@ -1,5 +1,7 @@
 # Visualization {#viz}
 
+<h5>[rmd version of file](05-visualization.Rmd)</h5> 
+
 While visualizations can be used for exploration and communication, for the competition, you will use plots to communicate, that is, share the relationships you have found in visual form. I did not find anything interesting between the price of gold, the daily spread of Tripwire prices, and the Twitter sentiment analysis. 
 
 We will use the most popular visualization package in R, `ggplot2`[@R-ggplot2], to create our graphs. Another popular R package used for visualizations is the `lattice` package. Base R also provides extensive plotting functions. `ggplot` uses themes as formatting templates (similar to a website's use of css). The British Broadcasting Company provides a theme that renders a professional look to the graphs. The theme can be found in the package `bbplot` [@R-bbplot].
@@ -42,9 +44,12 @@ kable(head(final_data_long), caption = "Long Format", tidy = FALSE)
 ```
 
 ## Plots
-The distribution of the values is usually insightful. You may discover that there is little variation (which usually makes the variable 'boring'), that the distribution is normal, has extremes, or has multiple humps. Any of these results may help shape how you think about examining the relationships.
 
-Note that I have turned warning off for this chunk. This option suppresses warnings from appearing on the rendered page / book. 
+Note that I have turned warning off for these chunks. This option suppresses warnings from appearing on the rendered page / book. 
+
+### Density
+
+The distribution of the values is usually insightful. You may discover that there is little variation (which usually makes the variable 'boring'), that the distribution is normal, has extremes, or has multiple humps. Any of these results may help shape how you think about examining the relationships.
 
 ```{r Density, message = FALSE, warning = FALSE, fig.cap = 'Distribution of Values', fig.align = 'center'}
 
@@ -60,6 +65,8 @@ ggplot(final_data_long) +
 
 
 ```
+
+### Line
 
 Next, let's compare the changes over time using a line graph. Do we see values go up together, change in inverse, or seem to have no pattern at all? We use the wide data format, `scale` within the code, and assign our own legend via the `scale_colour_manual` command.
 
@@ -94,11 +101,17 @@ ggplot(final_data_long, aes(x = created_at)) +
 
 ```
 
+### Bubbleplot
+
 A bubbleplot (a scatterplot with glyph sizes scaled according to a third variable) is another popular way to visually communicate relationships. In a scatterplot a variable is rendered in increasing order on the X axis and a second in increasing order on the Y axis. We again are looking for patterns - does a higher value of one variable
 
 We will use a combination of values for each bubbleplot axis. For the X axis, we will take the sentiment score and multiple it by the number of tweets for that date (as a measure of breadth of sentiment intensity). For the Y axis, we will take the difference between the high and low values on a particular date and multiple it by the trading volume, again as a measure of breadth of the market's opinion of Tripwire. We will plot the price of gold for each date for the size of the glyph representing the X and Y coordinates. Finally, we impose a line to trace the change over the graph. Note that we do not use the date field. The first glyph may be from the last date in the data set - unlike the line graph, there is no longitudinal measures in the graph. 
 
+We use the `ggrepel`[@R-ggrepel] for the `geom_text_repel` command which reduces text label overlap.
+
 ```{r Bubbleplot, message = FALSE, warning = FALSE, fig.cap = 'Bubbleplot of Values', fig.align = 'center'}
+
+library(ggrepel) # 
 
 ggplot(data = final_data, aes(x = scale(total_sentiment*n), 
                               y = scale(TRIP.Diff*TRIP.Volume), 
@@ -106,7 +119,8 @@ ggplot(data = final_data, aes(x = scale(total_sentiment*n),
   geom_smooth(se = FALSE, color = "black", linetype = 5, size = .5) +
   geom_point(color = "black", fill = "gold", shape = 21) +
   geom_hline(yintercept = 0, size = 1, color="#333333") +
-  geom_text(aes(label = paste0("$", round(gold_morning_price,0))), size = 6, nudge_x = 0.12, nudge_y = -0.07) + 
+#  geom_text(aes(label = paste0("$", round(gold_morning_price,0))), size = 6, nudge_x = 0.12, nudge_y = -0.07) + 
+  geom_text_repel(aes(label = paste0("$", round(gold_morning_price,0))), size = 6, nudge_x = 0.12, nudge_y = -0.07) +
   bbc_style() +
   theme(axis.title = element_text(size = 18)) +
   theme(axis.text.x = element_blank(), axis.text.y = element_blank()) + # override bbc_style axis title supression

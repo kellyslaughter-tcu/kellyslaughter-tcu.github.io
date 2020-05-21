@@ -1,5 +1,7 @@
 # Publishing
 
+<h5>[rmd version of file](06-publishing.Rmd)</h5> 
+
 The `rmd` files we have used for the project can be rendered as PDFs, Word documents, html files, and markdown (md) documents. Some `rmd` formatting syntax and options can be found at https://rstudio.com/wp-content/uploads/2016/03/rmarkdown-cheatsheet-2.0.pdf. A tutorial for `rmd` can be found at https://rmarkdown.rstudio.com/lesson-1.html. The syntax is consistent with the [Pandoc](https://en.wikipedia.org/wiki/Pandoc) standards. The most important formatting decision will be whether code is executed and displayed. These choices can be controlled as:
 
 * include = FALSE: blocks code and results from appearing but the code still executes

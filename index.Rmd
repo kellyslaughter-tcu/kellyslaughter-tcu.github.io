@@ -14,6 +14,8 @@ description: "Data Science Competition, 2020."
 
 # Overview {#intro}
 
+<h5>[rmd version of file](index.Rmd)</h5> 
+
 Welcome to the inaugural Neeley BIS Data Science Competition! Teams and individuals will research relationships between social media and economic or financial metrics and present the findings visually. The social media content may be related to a (set of) persons or terms. The economic data may be consumer spending and borrowing, stock prices, manufacturing output, etc. Competitors may want to first brainstorm about the relationships they are seeking to uncover, informally examine the relationships to see if anything of interest exists, then develop a plan for developing the more rigorous analysis and supporting documents.
 
 In this online book, I will share a 'fake' example of an entry. The code behind each chapter will be explained in our Zoom meetings as documented in Table \@ref(tab:Meeting-Table). 

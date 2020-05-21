@@ -24,7 +24,7 @@
 <meta name="author" content="Kelly T Slaughter" />
 
 
-<meta name="date" content="2020-05-20" />
+<meta name="date" content="2020-05-21" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -120,7 +120,11 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="4" data-path="comb.html"><a href="comb.html"><i class="fa fa-check"></i><b>4</b> Combining Data</a></li>
 <li class="chapter" data-level="5" data-path="viz.html"><a href="viz.html"><i class="fa fa-check"></i><b>5</b> Visualization</a><ul>
 <li class="chapter" data-level="5.1" data-path="viz.html"><a href="viz.html#data-prep"><i class="fa fa-check"></i><b>5.1</b> Data Prep</a></li>
-<li class="chapter" data-level="5.2" data-path="viz.html"><a href="viz.html#plots"><i class="fa fa-check"></i><b>5.2</b> Plots</a></li>
+<li class="chapter" data-level="5.2" data-path="viz.html"><a href="viz.html#plots"><i class="fa fa-check"></i><b>5.2</b> Plots</a><ul>
+<li class="chapter" data-level="5.2.1" data-path="viz.html"><a href="viz.html#density"><i class="fa fa-check"></i><b>5.2.1</b> Density</a></li>
+<li class="chapter" data-level="5.2.2" data-path="viz.html"><a href="viz.html#line"><i class="fa fa-check"></i><b>5.2.2</b> Line</a></li>
+<li class="chapter" data-level="5.2.3" data-path="viz.html"><a href="viz.html#bubbleplot"><i class="fa fa-check"></i><b>5.2.3</b> Bubbleplot</a></li>
+</ul></li>
 </ul></li>
 <li class="chapter" data-level="6" data-path="publishing.html"><a href="publishing.html"><i class="fa fa-check"></i><b>6</b> Publishing</a><ul>
 <li class="chapter" data-level="6.1" data-path="publishing.html"><a href="publishing.html#bibliography"><i class="fa fa-check"></i><b>6.1</b> Bibliography</a></li>
@@ -144,7 +148,9 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
             <section class="normal" id="section-">
 <div id="txt" class="section level1">
 <h1><span class="header-section-number">3</span> Text Analysis</h1>
-    <h5><a href="03-text_analysis.Rmd" class="uri">This file in rmd form</a></h5>
+<h5>
+<a href="03-text_analysis.Rmd">rmd version of file</a>
+</h5>
 <p>In this chapter we will perform simple text analysis - count and sentiment by word. Detailed guidance for text mining is provided at <a href="https://www.tidytextmining.com/tidytext.html">Text Mining with R</a><span class="citation">(Xie <a href="#ref-xie2020">2020</a><a href="#ref-xie2020">a</a>)</span>. We first need to tokenize the text (i.e., break the text apart into smaller units for analysis). We will tokenize by word. Instead of tokenizing by word, you can tokenize by n-gram, e.g., pairs, triplets, etc. of words via <code>vacation_tweets_tt2 &lt;- vacation_tweets_df %&gt;% unnest_tokens(bigram, text, token = &quot;ngrams&quot;, n = 2)</code>. We will use the command <code>unnest_tokens</code> from the <code>tidytext</code><span class="citation">(Robinson and Silge <a href="#ref-R-tidytext">2020</a>)</span> package to do our work.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidytext)
 
@@ -170,37 +176,37 @@ vacation_reddit_tt &lt;-<span class="st"> </span>vacation_tweets_tt <span class=
 vacation_tweets_tt<span class="op">$</span>created_at &lt;-<span class="st"> </span><span class="kw">as_date</span>(vacation_tweets_tt<span class="op">$</span>created_at) <span class="co"># By date, drop time stamp so we can generate a meaningful count by time</span>
 tweet_word_count_by_date &lt;-<span class="st"> </span>vacation_tweets_tt <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(created_at) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(word, <span class="dt">sort =</span> <span class="ot">TRUE</span>) 
 <span class="kw">ungroup</span>(tweet_word_count_by_date)</code></pre></div>
-<pre><code>## # A tibble: 1,444 x 3
+<pre><code>## # A tibble: 1,471 x 3
 ##    created_at word          n
 ##    &lt;date&gt;     &lt;chr&gt;     &lt;int&gt;
-##  1 2020-05-13 caribbean    20
-##  2 2020-05-19 vacation     20
-##  3 2020-05-13 vacation     19
-##  4 2020-05-16 vacation     18
-##  5 2020-05-19 caribbean    18
-##  6 2020-05-12 https        16
-##  7 2020-05-12 t.co         16
-##  8 2020-05-14 https        16
-##  9 2020-05-14 t.co         16
-## 10 2020-05-16 https        16
-## # ... with 1,434 more rows</code></pre>
+##  1 2020-05-19 vacation     19
+##  2 2020-05-16 vacation     18
+##  3 2020-05-13 caribbean    17
+##  4 2020-05-19 caribbean    17
+##  5 2020-05-13 vacation     16
+##  6 2020-05-14 https        16
+##  7 2020-05-14 t.co         16
+##  8 2020-05-16 https        16
+##  9 2020-05-16 t.co         16
+## 10 2020-05-20 caribbean    16
+## # ... with 1,461 more rows</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">vacation_reddit_tt<span class="op">$</span>created_at &lt;-<span class="st"> </span><span class="kw">as_date</span>(vacation_reddit_tt<span class="op">$</span>created_at) 
 reddit_word_count_by_date &lt;-<span class="st"> </span>vacation_reddit_tt <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(created_at) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(word, <span class="dt">sort =</span> <span class="ot">TRUE</span>) 
 <span class="kw">ungroup</span>(reddit_word_count_by_date)</code></pre></div>
-<pre><code>## # A tibble: 1,444 x 3
+<pre><code>## # A tibble: 1,471 x 3
 ##    created_at word          n
 ##    &lt;date&gt;     &lt;chr&gt;     &lt;int&gt;
-##  1 2020-05-13 caribbean    20
-##  2 2020-05-19 vacation     20
-##  3 2020-05-13 vacation     19
-##  4 2020-05-16 vacation     18
-##  5 2020-05-19 caribbean    18
-##  6 2020-05-12 https        16
-##  7 2020-05-12 t.co         16
-##  8 2020-05-14 https        16
-##  9 2020-05-14 t.co         16
-## 10 2020-05-16 https        16
-## # ... with 1,434 more rows</code></pre>
+##  1 2020-05-19 vacation     19
+##  2 2020-05-16 vacation     18
+##  3 2020-05-13 caribbean    17
+##  4 2020-05-19 caribbean    17
+##  5 2020-05-13 vacation     16
+##  6 2020-05-14 https        16
+##  7 2020-05-14 t.co         16
+##  8 2020-05-16 https        16
+##  9 2020-05-16 t.co         16
+## 10 2020-05-20 caribbean    16
+## # ... with 1,461 more rows</code></pre>
 <p>Let’s combine the resulting Twitter and Reddit tokenized data. To keep track of the source, we will add a field called <code>source</code> with a value of <em>Twitter</em> or <em>Reddit</em> as appropriate (note that I use two different coding techniques to accomplish the same result). As the fields across the two sources are identical (because of the prior work narrowing the number of variables), we can simply append one data set to the other with a row bind command, <code>rbind</code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">tweet_word_count_by_date &lt;-<span class="st"> </span><span class="kw">mutate</span>(tweet_word_count_by_date, <span class="dt">source =</span> <span class="st">&quot;Twitter&quot;</span>) <span class="co"># Adding field via mutate in dplyr</span>
 reddit_word_count_by_date<span class="op">$</span>source &lt;-<span class="st"> &quot;Reddit&quot;</span> <span class="co"># Adding field using base R</span>

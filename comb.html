@@ -24,7 +24,7 @@
 <meta name="author" content="Kelly T Slaughter" />
 
 
-<meta name="date" content="2020-05-20" />
+<meta name="date" content="2020-05-21" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -120,7 +120,11 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="4" data-path="comb.html"><a href="comb.html"><i class="fa fa-check"></i><b>4</b> Combining Data</a></li>
 <li class="chapter" data-level="5" data-path="viz.html"><a href="viz.html"><i class="fa fa-check"></i><b>5</b> Visualization</a><ul>
 <li class="chapter" data-level="5.1" data-path="viz.html"><a href="viz.html#data-prep"><i class="fa fa-check"></i><b>5.1</b> Data Prep</a></li>
-<li class="chapter" data-level="5.2" data-path="viz.html"><a href="viz.html#plots"><i class="fa fa-check"></i><b>5.2</b> Plots</a></li>
+<li class="chapter" data-level="5.2" data-path="viz.html"><a href="viz.html#plots"><i class="fa fa-check"></i><b>5.2</b> Plots</a><ul>
+<li class="chapter" data-level="5.2.1" data-path="viz.html"><a href="viz.html#density"><i class="fa fa-check"></i><b>5.2.1</b> Density</a></li>
+<li class="chapter" data-level="5.2.2" data-path="viz.html"><a href="viz.html#line"><i class="fa fa-check"></i><b>5.2.2</b> Line</a></li>
+<li class="chapter" data-level="5.2.3" data-path="viz.html"><a href="viz.html#bubbleplot"><i class="fa fa-check"></i><b>5.2.3</b> Bubbleplot</a></li>
+</ul></li>
 </ul></li>
 <li class="chapter" data-level="6" data-path="publishing.html"><a href="publishing.html"><i class="fa fa-check"></i><b>6</b> Publishing</a><ul>
 <li class="chapter" data-level="6.1" data-path="publishing.html"><a href="publishing.html#bibliography"><i class="fa fa-check"></i><b>6.1</b> Bibliography</a></li>
@@ -144,7 +148,9 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
             <section class="normal" id="section-">
 <div id="comb" class="section level1">
 <h1><span class="header-section-number">4</span> Combining Data</h1>
-    <h5><a href="04-combining_data.Rmd" class="uri">This file in rmd form</a></h5>
+<h5>
+<a href="04-combining_data.Rmd">rmd version of file</a>
+</h5>
 <p>The following data sets are now available:</p>
 <ul>
 <li><strong>London_Gold_AM</strong>: Daily price of gold</li>
@@ -194,17 +200,6 @@ final_data &lt;-<span class="st"> </span><span class="kw">select</span>(all_data
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">2020-05-11</td>
-<td align="right">26</td>
-<td align="right">64</td>
-<td align="right">2</td>
-<td align="right">0</td>
-<td align="right">1698.80</td>
-<td align="right">1.110001</td>
-<td align="right">4766500</td>
-<td align="left">26,153</td>
-</tr>
-<tr class="even">
 <td align="left">2020-05-12</td>
 <td align="right">26</td>
 <td align="right">40</td>
@@ -215,7 +210,7 @@ final_data &lt;-<span class="st"> </span><span class="kw">select</span>(all_data
 <td align="right">3743300</td>
 <td align="left">26,153</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">2020-05-13</td>
 <td align="right">32</td>
 <td align="right">50</td>
@@ -226,7 +221,7 @@ final_data &lt;-<span class="st"> </span><span class="kw">select</span>(all_data
 <td align="right">4786100</td>
 <td align="left">26,153</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">2020-05-14</td>
 <td align="right">28</td>
 <td align="right">40</td>
@@ -237,7 +232,7 @@ final_data &lt;-<span class="st"> </span><span class="kw">select</span>(all_data
 <td align="right">5610700</td>
 <td align="left">26,153</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">2020-05-15</td>
 <td align="right">40</td>
 <td align="right">56</td>
@@ -248,15 +243,26 @@ final_data &lt;-<span class="st"> </span><span class="kw">select</span>(all_data
 <td align="right">2939200</td>
 <td align="left">26,153</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">2020-05-18</td>
-<td align="right">46</td>
-<td align="right">14</td>
+<td align="right">44</td>
+<td align="right">10</td>
 <td align="right">20</td>
 <td align="right">0</td>
 <td align="right">1756.90</td>
 <td align="right">2.790001</td>
 <td align="right">8243600</td>
+<td align="left">26,153</td>
+</tr>
+<tr class="even">
+<td align="left">2020-05-19</td>
+<td align="right">24</td>
+<td align="right">44</td>
+<td align="right">6</td>
+<td align="right">0</td>
+<td align="right">1735.25</td>
+<td align="right">0.990002</td>
+<td align="right">6465400</td>
 <td align="left">26,153</td>
 </tr>
 </tbody>
