@@ -24,7 +24,7 @@
 <meta name="author" content="Kelly T Slaughter" />
 
 
-<meta name="date" content="2020-05-21" />
+<meta name="date" content="2020-05-25" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -152,13 +152,13 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <a href="05-visualization.Rmd">rmd version of file</a>
 </h5>
 <p>While visualizations can be used for exploration and communication, for the competition, you will use plots to communicate, that is, share the relationships you have found in visual form. I did not find anything interesting between the price of gold, the daily spread of Tripwire prices, and the Twitter sentiment analysis.</p>
-<p>We will use the most popular visualization package in R, <code>ggplot2</code><span class="citation">(Wickham, Chang, et al. <a href="#ref-R-ggplot2">2020</a>)</span>, to create our graphs. Another popular R package used for visualizations is the <code>lattice</code> package. Base R also provides extensive plotting functions. <code>ggplot</code> uses themes as formatting templates (similar to a website’s use of css). The British Broadcasting Company provides a theme that renders a professional look to the graphs. The theme can be found in the package <code>bbplot</code> <span class="citation">(Stylianou et al. <a href="#ref-R-bbplot">2020</a>)</span>.</p>
+<p>We will use the most popular visualization package in R, <strong>ggplot2</strong><span class="citation">(Wickham, Chang, et al. <a href="#ref-R-ggplot2">2020</a>)</span>, to create our graphs. Another popular R package used for visualizations is the <strong>lattice</strong> package. Base R also provides extensive plotting functions. <code>ggplot</code> uses themes as formatting templates (similar to a website’s use of css). The British Broadcasting Company provides a theme that renders a professional look to the graphs. The theme can be found in the package <strong>bbplot</strong> <span class="citation">(Stylianou et al. <a href="#ref-R-bbplot">2020</a>)</span>.</p>
 <div id="data-prep" class="section level2">
 <h2><span class="header-section-number">5.1</span> Data Prep</h2>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(ggplot2)
 <span class="kw">library</span>(bbplot) <span class="co"># devtools::install_github(&#39;bbc/bbplot&#39;) # Not all packages are available via CRAN; run once after installing devtools package</span></code></pre></div>
-<p>Some visualizations are more readily generated from long formats rather than wide formats. In the chunk below, we use the <code>dplyr</code> <code>select</code> function to pull the four values we want to use for visualizations into a new data set called <code>final_data_long</code> (still in a wide format). We want to plot values like gold prices and number of tweets together, but the scale of the two is dramatically different. To remedy this issue, we use the <code>scale</code> command on each value which ‘centers’ the data (makes the middle value zero and adjusts the other values accordingly) and the divides the values by the value’s standard deviation. The result are sets of values with similar values.</p>
-<p>Finally, we call the <code>gather</code> function from <code>dplyr</code> (note that the code assumes we have already loaded <code>dplyr</code> into memory) to transition from wide to long.</p>
+<p>Some visualizations are more readily generated from long formats rather than wide formats. In the chunk below, we use the <strong>dplyr</strong> <code>select()</code> function to pull the four values we want to use for visualizations into a new data set called <code>final_data_long</code> (still in a wide format). We want to plot values like gold prices and number of tweets together, but the scale of the two is dramatically different. To remedy this issue, we use the <code>scale</code> command on each value which ‘centers’ the data (makes the middle value zero and adjusts the other values accordingly) and the divides the values by the value’s standard deviation. The result are sets of values with similar values.</p>
+<p>Finally, we call the <code>gather()</code> function from <strong>dplyr</strong> (note that the code assumes we have already loaded <strong>dplyr</strong> into memory) to transition from wide to long.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">final_data_long &lt;-<span class="st"> </span>final_data <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(created_at, total_sentiment, TRIP.Diff, gold_morning_price)
 
 final_data_long<span class="op">$</span>gold_morning_price &lt;-<span class="st"> </span><span class="kw">scale</span>(final_data_long<span class="op">$</span>gold_morning_price)
@@ -184,50 +184,6 @@ final_data_long &lt;-<span class="st"> </span>final_data_long <span class="op">%
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">2020-05-12</td>
-<td align="right">26</td>
-<td align="right">40</td>
-<td align="right">6</td>
-<td align="right">0</td>
-<td align="right">1703.45</td>
-<td align="right">0.649999</td>
-<td align="right">3743300</td>
-<td align="left">26,153</td>
-</tr>
-<tr class="even">
-<td align="left">2020-05-13</td>
-<td align="right">32</td>
-<td align="right">50</td>
-<td align="right">6</td>
-<td align="right">0</td>
-<td align="right">1699.85</td>
-<td align="right">1.480000</td>
-<td align="right">4786100</td>
-<td align="left">26,153</td>
-</tr>
-<tr class="odd">
-<td align="left">2020-05-14</td>
-<td align="right">28</td>
-<td align="right">40</td>
-<td align="right">4</td>
-<td align="right">0</td>
-<td align="right">1716.40</td>
-<td align="right">1.140000</td>
-<td align="right">5610700</td>
-<td align="left">26,153</td>
-</tr>
-<tr class="even">
-<td align="left">2020-05-15</td>
-<td align="right">40</td>
-<td align="right">56</td>
-<td align="right">8</td>
-<td align="right">0</td>
-<td align="right">1734.85</td>
-<td align="right">0.470000</td>
-<td align="right">2939200</td>
-<td align="left">26,153</td>
-</tr>
-<tr class="odd">
 <td align="left">2020-05-18</td>
 <td align="right">44</td>
 <td align="right">10</td>
@@ -249,6 +205,39 @@ final_data_long &lt;-<span class="st"> </span>final_data_long <span class="op">%
 <td align="right">6465400</td>
 <td align="left">26,153</td>
 </tr>
+<tr class="odd">
+<td align="left">2020-05-20</td>
+<td align="right">40</td>
+<td align="right">40</td>
+<td align="right">14</td>
+<td align="right">0</td>
+<td align="right">1750.05</td>
+<td align="right">0.970000</td>
+<td align="right">4084300</td>
+<td align="left">26,153</td>
+</tr>
+<tr class="even">
+<td align="left">2020-05-21</td>
+<td align="right">50</td>
+<td align="right">48</td>
+<td align="right">16</td>
+<td align="right">0</td>
+<td align="right">1732.80</td>
+<td align="right">1.079999</td>
+<td align="right">3622300</td>
+<td align="left">26,153</td>
+</tr>
+<tr class="odd">
+<td align="left">2020-05-22</td>
+<td align="right">34</td>
+<td align="right">84</td>
+<td align="right">2</td>
+<td align="right">0</td>
+<td align="right">1732.45</td>
+<td align="right">0.969999</td>
+<td align="right">2896400</td>
+<td align="left">26,153</td>
+</tr>
 </tbody>
 </table>
 <table>
@@ -262,34 +251,34 @@ final_data_long &lt;-<span class="st"> </span>final_data_long <span class="op">%
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">2020-05-12</td>
-<td align="left">total_sentiment</td>
-<td align="right">0.0768521</td>
-</tr>
-<tr class="even">
-<td align="left">2020-05-13</td>
-<td align="left">total_sentiment</td>
-<td align="right">0.7493075</td>
-</tr>
-<tr class="odd">
-<td align="left">2020-05-14</td>
-<td align="left">total_sentiment</td>
-<td align="right">0.0768521</td>
-</tr>
-<tr class="even">
-<td align="left">2020-05-15</td>
-<td align="left">total_sentiment</td>
-<td align="right">1.1527808</td>
-</tr>
-<tr class="odd">
 <td align="left">2020-05-18</td>
 <td align="left">total_sentiment</td>
-<td align="right">-1.9405144</td>
+<td align="right">-1.3350200</td>
 </tr>
 <tr class="even">
 <td align="left">2020-05-19</td>
 <td align="left">total_sentiment</td>
-<td align="right">0.3458343</td>
+<td align="right">-0.0455120</td>
+</tr>
+<tr class="odd">
+<td align="left">2020-05-20</td>
+<td align="left">total_sentiment</td>
+<td align="right">-0.1972189</td>
+</tr>
+<tr class="even">
+<td align="left">2020-05-21</td>
+<td align="left">total_sentiment</td>
+<td align="right">0.1061948</td>
+</tr>
+<tr class="odd">
+<td align="left">2020-05-22</td>
+<td align="left">total_sentiment</td>
+<td align="right">1.4715562</td>
+</tr>
+<tr class="even">
+<td align="left">2020-05-18</td>
+<td align="left">TRIP.Diff</td>
+<td align="right">1.7859659</td>
 </tr>
 </tbody>
 </table>
@@ -310,7 +299,7 @@ final_data_long &lt;-<span class="st"> </span>final_data_long <span class="op">%
 <span class="st">  </span><span class="kw">theme</span>(<span class="dt">axis.text.y =</span> <span class="kw">element_blank</span>()) <span class="op">+</span>
 <span class="st">  </span><span class="kw">theme</span>(<span class="dt">axis.text.x =</span> <span class="kw">element_blank</span>()) </code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:Density"></span>
-<img src="Density-1.png" alt="Distribution of Values" width="672" />
+<img src="d.png" alt="Distribution of Values" width="672" />
 <p class="caption">
 Figure 5.1: Distribution of Values
 </p>
@@ -318,7 +307,7 @@ Figure 5.1: Distribution of Values
 </div>
 <div id="line" class="section level3">
 <h3><span class="header-section-number">5.2.2</span> Line</h3>
-<p>Next, let’s compare the changes over time using a line graph. Do we see values go up together, change in inverse, or seem to have no pattern at all? We use the wide data format, <code>scale</code> within the code, and assign our own legend via the <code>scale_colour_manual</code> command.</p>
+<p>Next, let’s compare the changes over time using a line graph. Do we see values go up together, change in inverse, or seem to have no pattern at all? We use the wide data format, <code>scale()</code> within the code, and assign our own legend via the <code>scale_colour_manual()</code> command.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(final_data, <span class="kw">aes</span>(<span class="dt">x =</span> created_at)) <span class="op">+</span>
 <span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">y =</span> <span class="kw">scale</span>(gold_morning_price), <span class="dt">color=</span><span class="st">&quot;Gold&quot;</span>), <span class="dt">lty =</span> <span class="dv">1</span>, <span class="dt">size =</span> <span class="dv">2</span>) <span class="op">+</span>
 <span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">y =</span> <span class="kw">scale</span>(total_sentiment), <span class="dt">color=</span><span class="st">&quot;Sentiment&quot;</span>), <span class="dt">lty =</span> <span class="dv">1</span>, <span class="dt">size =</span> <span class="dv">1</span>) <span class="op">+</span>
@@ -330,12 +319,12 @@ Figure 5.1: Distribution of Values
 <span class="st">  </span><span class="kw">labs</span>(<span class="dt">title=</span><span class="st">&quot;Gold vs Drivers&quot;</span>,
        <span class="dt">subtitle =</span> <span class="st">&quot;sentiment and Tripwire Daily Stock Price Differences&quot;</span>) <span class="co"># You may receive warning messages indicating the Arial font is not available - that is OK</span></code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:Line-Graph"></span>
-<img src="Line-Graph-1.png" alt="Values over Time" width="672" />
+<img src="l.png" alt="Values over Time" width="672" />
 <p class="caption">
 Figure 5.2: Values over Time
 </p>
 </div>
-<p>Note: The use of the legend above does not follow normal programming convention. We can use the long data and then use <code>aes(color = TYPE)</code> to autogenerate a legend.<code>scale</code> is no longer helpful when used within ggplot2 as the full range of values across variables is in a single column, so scaling must be done in advance. Code using the long format to generate the same plot is provided (but not executed) below.</p>
+<p>Note: The use of the legend above does not follow normal programming convention. We can use the long data and then use <code>aes(color = TYPE)</code> to autogenerate a legend.<code>scale()</code> is no longer helpful when used within ggplot2 as the full range of values across variables is in a single column, so scaling must be done in advance. Code using the long format to generate the same plot is provided (but not executed) below.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(final_data_long, <span class="kw">aes</span>(<span class="dt">x =</span> created_at)) <span class="op">+</span>
 <span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">y =</span> value, <span class="dt">color =</span> source), <span class="dt">lty =</span> <span class="dv">1</span>, <span class="dt">size =</span> <span class="dv">1</span>) <span class="op">+</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">geom_hline</span>(<span class="dt">yintercept =</span> <span class="dv">0</span>, <span class="dt">size =</span> <span class="dv">1</span>, <span class="dt">color=</span><span class="st">&quot;#333333&quot;</span>) <span class="op">+</span>
@@ -350,7 +339,7 @@ Figure 5.2: Values over Time
 <h3><span class="header-section-number">5.2.3</span> Bubbleplot</h3>
 <p>A bubbleplot (a scatterplot with glyph sizes scaled according to a third variable) is another popular way to visually communicate relationships. In a scatterplot a variable is rendered in increasing order on the X axis and a second in increasing order on the Y axis. We again are looking for patterns - does a higher value of one variable</p>
 <p>We will use a combination of values for each bubbleplot axis. For the X axis, we will take the sentiment score and multiple it by the number of tweets for that date (as a measure of breadth of sentiment intensity). For the Y axis, we will take the difference between the high and low values on a particular date and multiple it by the trading volume, again as a measure of breadth of the market’s opinion of Tripwire. We will plot the price of gold for each date for the size of the glyph representing the X and Y coordinates. Finally, we impose a line to trace the change over the graph. Note that we do not use the date field. The first glyph may be from the last date in the data set - unlike the line graph, there is no longitudinal measures in the graph.</p>
-<p>We use the <code>ggrepel</code><span class="citation">(Slowikowski <a href="#ref-R-ggrepel">2020</a>)</span> for the <code>geom_text_repel</code> command which reduces text label overlap.</p>
+<p>We use the <strong>ggrepel</strong><span class="citation">(Slowikowski <a href="#ref-R-ggrepel">2020</a>)</span> for the <code>geom_text_repel()</code> command which reduces text label overlap.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(ggrepel) <span class="co"># </span>
 
 <span class="kw">ggplot</span>(<span class="dt">data =</span> final_data, <span class="kw">aes</span>(<span class="dt">x =</span> <span class="kw">scale</span>(total_sentiment<span class="op">*</span>n), 
@@ -372,7 +361,7 @@ Figure 5.2: Values over Time
 <span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;Gold vs Drivers&quot;</span>,
        <span class="dt">subtitle =</span> <span class="st">&quot;Sentiment Intensify by Tripwire Change Intensity&quot;</span>) </code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:Bubbleplot"></span>
-<img src="Bubbleplot-1.png" alt="Bubbleplot of Values" width="672" />
+<img src="b.png" alt="Bubbleplot of Values" width="672" />
 <p class="caption">
 Figure 5.3: Bubbleplot of Values
 </p>

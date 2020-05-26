@@ -4,7 +4,7 @@
 
 While visualizations can be used for exploration and communication, for the competition, you will use plots to communicate, that is, share the relationships you have found in visual form. I did not find anything interesting between the price of gold, the daily spread of Tripwire prices, and the Twitter sentiment analysis. 
 
-We will use the most popular visualization package in R, `ggplot2`[@R-ggplot2], to create our graphs. Another popular R package used for visualizations is the `lattice` package. Base R also provides extensive plotting functions. `ggplot` uses themes as formatting templates (similar to a website's use of css). The British Broadcasting Company provides a theme that renders a professional look to the graphs. The theme can be found in the package `bbplot` [@R-bbplot].
+We will use the most popular visualization package in R, **ggplot2**[@R-ggplot2], to create our graphs. Another popular R package used for visualizations is the **lattice** package. Base R also provides extensive plotting functions. `ggplot` uses themes as formatting templates (similar to a website's use of css). The British Broadcasting Company provides a theme that renders a professional look to the graphs. The theme can be found in the package **bbplot** [@R-bbplot].
 
 ## Data Prep
 ```{r Visualization-Prep, message = FALSE, warning = FALSE}
@@ -14,9 +14,9 @@ library(bbplot) # devtools::install_github('bbc/bbplot') # Not all packages are 
 
 ```
 
-Some visualizations are more readily generated from long formats rather than wide formats. In the chunk below, we use the `dplyr` `select` function to pull the four values we want to use for visualizations into a new data set called `final_data_long` (still in a wide format). We want to plot values like gold prices and number of tweets together, but the scale of the two is dramatically different. To remedy this issue, we use the `scale` command on each value which 'centers' the data (makes the middle value zero and adjusts the other values accordingly) and the divides the values by the value's standard deviation. The result are sets of values with similar values.
+Some visualizations are more readily generated from long formats rather than wide formats. In the chunk below, we use the **dplyr** `select()` function to pull the four values we want to use for visualizations into a new data set called `final_data_long` (still in a wide format). We want to plot values like gold prices and number of tweets together, but the scale of the two is dramatically different. To remedy this issue, we use the `scale` command on each value which 'centers' the data (makes the middle value zero and adjusts the other values accordingly) and the divides the values by the value's standard deviation. The result are sets of values with similar values.
 
-Finally, we call the `gather` function from `dplyr` (note that the code assumes we have already loaded `dplyr` into memory) to transition from wide to long.
+Finally, we call the `gather()` function from **dplyr** (note that the code assumes we have already loaded **dplyr** into memory) to transition from wide to long.
 
 ```{r Final-Data-Long, message = FALSE, warning = FALSE}
 
@@ -68,7 +68,7 @@ ggplot(final_data_long) +
 
 ### Line
 
-Next, let's compare the changes over time using a line graph. Do we see values go up together, change in inverse, or seem to have no pattern at all? We use the wide data format, `scale` within the code, and assign our own legend via the `scale_colour_manual` command.
+Next, let's compare the changes over time using a line graph. Do we see values go up together, change in inverse, or seem to have no pattern at all? We use the wide data format, `scale()` within the code, and assign our own legend via the `scale_colour_manual()` command.
 
 ```{r Line-Graph, message = FALSE, warning = FALSE, fig.cap = 'Values over Time',  fig.align = 'center'}
 
@@ -85,7 +85,7 @@ ggplot(final_data, aes(x = created_at)) +
 
 ```
 
-Note: The use of the legend above does not follow normal programming convention. We can use the long data and then use `aes(color = TYPE)` to autogenerate a legend.`scale` is no longer helpful when used within ggplot2 as the full range of values across variables is in a single column, so scaling must be done in advance. Code using the long format to generate the same plot is provided (but not executed) below.
+Note: The use of the legend above does not follow normal programming convention. We can use the long data and then use `aes(color = TYPE)` to autogenerate a legend.`scale()` is no longer helpful when used within ggplot2 as the full range of values across variables is in a single column, so scaling must be done in advance. Code using the long format to generate the same plot is provided (but not executed) below.
 
 ```{r Line-Graph2, eval = FALSE, message = FALSE, warning = FALSE, fig.cap = 'Values over Time (same)', out.width = '75%', fig.asp = .75, fig.align = 'center'}
 
@@ -107,7 +107,7 @@ A bubbleplot (a scatterplot with glyph sizes scaled according to a third variabl
 
 We will use a combination of values for each bubbleplot axis. For the X axis, we will take the sentiment score and multiple it by the number of tweets for that date (as a measure of breadth of sentiment intensity). For the Y axis, we will take the difference between the high and low values on a particular date and multiple it by the trading volume, again as a measure of breadth of the market's opinion of Tripwire. We will plot the price of gold for each date for the size of the glyph representing the X and Y coordinates. Finally, we impose a line to trace the change over the graph. Note that we do not use the date field. The first glyph may be from the last date in the data set - unlike the line graph, there is no longitudinal measures in the graph. 
 
-We use the `ggrepel`[@R-ggrepel] for the `geom_text_repel` command which reduces text label overlap.
+We use the **ggrepel**[@R-ggrepel] for the `geom_text_repel()` command which reduces text label overlap.
 
 ```{r Bubbleplot, message = FALSE, warning = FALSE, fig.cap = 'Bubbleplot of Values', fig.align = 'center'}
 

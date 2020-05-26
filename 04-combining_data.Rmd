@@ -15,7 +15,7 @@ However, one theory might be that the social data sentiments precede changes to 
 
 We also rename the variable storing the price of gold, `USD (AM)`, as `gold_morning_price`.  
 
-We use `inner_join` again, first combining `sentiment_data_by_date` and `London_Gold_AM` into an `all_data` data set, then through another `inner_join` combining the `all_data` with the data set `TRIP_wide`.
+We use `inner_join()` again, first combining `sentiment_data_by_date` and `London_Gold_AM` into an `all_data` data set, then through another `inner_join` combining the `all_data` with the data set `TRIP_wide`.
 
 ```{r Combine Daily Data, message = FALSE, warning = FALSE}
 
@@ -29,9 +29,9 @@ all_data <- inner_join(all_data, TRIP_wide, by = c("created_at" = "index"))
 
 The unemployment insurance is reported on a monthly basis, so we do not have a row to row match by date. Let's assume a three-month lag between the 'macro' condition of unemployment and the daily prices and sentiment. Thus, gold prices in May are associated with unemployment insurance in February. Thus, every price row by date in May will have the same BEA value from February.
 
-We need matching values across the data sets for successfully joining the data. To do so, we will 'extract' the month as an integer from the date fields. We will use the `str_sub` command courtesy of the `stringr`[@R-stringr] package against the BEA data (and then add three to synch February with May). 
+We need matching values across the data sets for successfully joining the data. To do so, we will 'extract' the month as an integer from the date fields. We will use the `str_sub()` command courtesy of the **stringr**[@R-stringr] package against the BEA data (and then add three to synch February with May). 
 
-As we are using an `inner_join`, any unmatched rows are lost. So, if we did not have any February dates in the BEA data set, we would have no data from the join. Keep that in mind as you chose your own lagging and leading relationships.
+As we are using an `inner_join()`, any unmatched rows are lost. So, if we did not have any February dates in the BEA data set, we would have no data from the join. Keep that in mind as you chose your own lagging and leading relationships.
 
 ```{r Combine-Daily-and-Monthly-Data, message = FALSE, warning = FALSE}
 

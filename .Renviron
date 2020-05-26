@@ -1,0 +1,8 @@
+BEA_KEY="33B8961E-CF26-47E4-83D3-D89E003D1881"
+QUANDL_KEY="GSyLWPWENLxhDZ-4Y7pj"
+TWITTER_app = "candidate_analytics_program"
+TWITTER_consumer_key = "YLJzyXFpKg1dCTa5uSMoLug8d"
+TWITTER_consumer_secret = "oGNObSOY4Sv7F1ick1RnJACLVB4TPqm7hRUifuNP3kyd5u96Lf"
+TWITTER_access_token = "1010711033034563584-0m5OonJTidYAexpvHYXLGkzaecdYWk"
+TWITTER_access_secret = "vc8ZgZajov532yODmAd6M9ZKSPaT2Qowg2ukfxl2M9TiM"
+TWITTER_PAT=c:\home/.rtweet_token1.rds

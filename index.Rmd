@@ -68,22 +68,22 @@ Before the May 28 meeting:
 * Download R (https://cran.r-project.org/)
 * Download RStudio (https://rstudio.com/products/rstudio/download/)
     + Install the tidyverse suite of packages using the command `install.packages("tidyverse")`
-        - Included in the suite is the `ggplot2` package that we will use for visualizations
+        - Included in the suite is the **ggplot2*`** package that we will use for visualizations
 * Have one person from your team create an account on GitHub (to use as a host for your final work product)
 * Brainstorm on the type of relationship you want to explore and publish. I will demonstrate how to obtain data from the following sources:
 
     + Stock price data from Yahoo 
-        - Install the quantmod package via `install.packages("quantmod")` 
+        - Install the **quantmod** package via `install.packages("quantmod")` 
     + Commodity prices for gold from Quandl
-        - Install the quantmod package via `install.packages("Quandl")`
+        - Install the **Quandl** package via `install.packages("Quandl")`
         - Create an account at https://www.quandl.com/sign-up through which you will be provided an API key
     + Social media data from Twitter
-        - Install the rtweet package via `install.packages("rtweet")` 
-        - Install the httpuv package via `install.packages("httpuv")` 
+        - Install the **rtweet** package via `install.packages("rtweet")` 
+        - Install the **httpuv** package via `install.packages("httpuv")` 
         - Create an account / application as explained at https://cran.r-project.org/web/packages/rtweet/vignettes/auth.html. After creatinging an account, you will have values for an application name, consumer key, consumer secret, access token, and access secret 
     + Social media data from Reddit\'s Stock Picks subreddit
-        - Install the rtweet package via `install.packages("RedditExtractoR")` 
+        - Install the **RedditExtractoR** package via `install.packages("RedditExtractoR")` 
     + Economic data from the Bureau of Economic Analysis [BEA] (https://www.bea.gov/)
         - You will need an API key as explained at https://apps.bea.gov/API/signup/index.cfm.
-        - While there is an R package available for acquiring BEA data, it has not been updated in a couple of years and it appears that a few commands may not be working. So we will use a direct RESTful call (i.e., `GET`) via the httr package via `install.packages("httr")` . Also install the jsonlite package. This package supports the manipulation of external data received as JSON.
+        - While there is an R package available for acquiring BEA data, it has not been updated in a couple of years and it appears that a few commands may not be working. So we will use a direct RESTful call (i.e., `GET`) via the **httr** package via `install.packages("httr")`. Also install the **jsonlite** package. This package supports the manipulation of external data received as JSON.
 

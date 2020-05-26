@@ -11,7 +11,7 @@ The `rmd` files we have used for the project can be rendered as PDFs, Word docum
 * warning = FALSE: blocks warnings.
 * eval = FALSE: Code appears but is not executed.
 
-The `bookdown`[@R-bookdown] package should be installed (`devtools::install_github("rstudio/bookdown")`) to create the book version of the project (see https://bookdown.org/yihui/bookdown/ for details). You may also need install the package `TinyTeX` (which includes XeLaTeX), then run the command `tinytex::install_tinytex()`. For further details, see https://yihui.name/tinytex/. Each `rmd` file contains one and only one chapter, and a chapter is defined by the first-level heading `#`.
+The **bookdown*`**[@R-bookdown] package should be installed (`devtools::install_github("rstudio/bookdown")`) to create the book version of the project (see https://bookdown.org/yihui/bookdown/ for details). You may also need install the package **TinyTeX** (which includes XeLaTeX), then run the command `tinytex::install_tinytex()`. For further details, see https://yihui.name/tinytex/. Each `rmd` file contains one and only one chapter, and a chapter is defined by the first-level heading `#`.
 
 Some issues to look for include:
 

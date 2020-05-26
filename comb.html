@@ -24,7 +24,7 @@
 <meta name="author" content="Kelly T Slaughter" />
 
 
-<meta name="date" content="2020-05-21" />
+<meta name="date" content="2020-05-25" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -161,15 +161,15 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p>As we combined the Twitter and Reddit data sets in <a href="txt.html#txt">3</a>, we will want to combine all data sets into a single set; this is often the most convenient way to develop visualizations. We are analyzing by date, and each data set includes a date which, conveniently, is in the same format of YYYY-MM-DD.</p>
 <p>However, one theory might be that the social data sentiments precede changes to the gold prices. In other words, when we compare data, we want to look at Twitter as of Monday to examine the gold price on Tuesday. One convenient way to support this goal is simply to subtract one from the social media <code>created_at</code> date (a better way may be to add a new date field to all the data sets and adjust the values as wished).</p>
 <p>We also rename the variable storing the price of gold, <code>USD (AM)</code>, as <code>gold_morning_price</code>.</p>
-<p>We use <code>inner_join</code> again, first combining <code>sentiment_data_by_date</code> and <code>London_Gold_AM</code> into an <code>all_data</code> data set, then through another <code>inner_join</code> combining the <code>all_data</code> with the data set <code>TRIP_wide</code>.</p>
+<p>We use <code>inner_join()</code> again, first combining <code>sentiment_data_by_date</code> and <code>London_Gold_AM</code> into an <code>all_data</code> data set, then through another <code>inner_join</code> combining the <code>all_data</code> with the data set <code>TRIP_wide</code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sentiment_data_by_date<span class="op">$</span>created_at &lt;-<span class="st"> </span>sentiment_data_by_date<span class="op">$</span>created_at <span class="op">-</span><span class="dv">1</span> <span class="co"># Alter date to day before as we assume social media is a leading indicator</span>
 London_Gold_AM &lt;-<span class="st"> </span>London_Gold_AM <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rename</span>(<span class="dt">gold_morning_price =</span> <span class="st">&#39;USD (AM)&#39;</span>)
 
 all_data &lt;-<span class="st"> </span><span class="kw">inner_join</span>(sentiment_data_by_date, London_Gold_AM, <span class="dt">by =</span> <span class="kw">c</span>(<span class="st">&quot;created_at&quot;</span> =<span class="st"> &quot;Date&quot;</span>)) <span class="co"># &#39;created_at&#39; will be the preserved key</span>
 all_data &lt;-<span class="st"> </span><span class="kw">inner_join</span>(all_data, TRIP_wide, <span class="dt">by =</span> <span class="kw">c</span>(<span class="st">&quot;created_at&quot;</span> =<span class="st"> &quot;index&quot;</span>))</code></pre></div>
 <p>The unemployment insurance is reported on a monthly basis, so we do not have a row to row match by date. Let’s assume a three-month lag between the ‘macro’ condition of unemployment and the daily prices and sentiment. Thus, gold prices in May are associated with unemployment insurance in February. Thus, every price row by date in May will have the same BEA value from February.</p>
-<p>We need matching values across the data sets for successfully joining the data. To do so, we will ‘extract’ the month as an integer from the date fields. We will use the <code>str_sub</code> command courtesy of the <code>stringr</code><span class="citation">(Wickham <a href="#ref-R-stringr">2019</a><a href="#ref-R-stringr">b</a>)</span> package against the BEA data (and then add three to synch February with May).</p>
-<p>As we are using an <code>inner_join</code>, any unmatched rows are lost. So, if we did not have any February dates in the BEA data set, we would have no data from the join. Keep that in mind as you chose your own lagging and leading relationships.</p>
+<p>We need matching values across the data sets for successfully joining the data. To do so, we will ‘extract’ the month as an integer from the date fields. We will use the <code>str_sub()</code> command courtesy of the <strong>stringr</strong><span class="citation">(Wickham <a href="#ref-R-stringr">2019</a><a href="#ref-R-stringr">b</a>)</span> package against the BEA data (and then add three to synch February with May).</p>
+<p>As we are using an <code>inner_join()</code>, any unmatched rows are lost. So, if we did not have any February dates in the BEA data set, we would have no data from the join. Keep that in mind as you chose your own lagging and leading relationships.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(stringr)
 <span class="kw">library</span>(lubridate)
 
@@ -200,50 +200,6 @@ final_data &lt;-<span class="st"> </span><span class="kw">select</span>(all_data
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">2020-05-12</td>
-<td align="right">26</td>
-<td align="right">40</td>
-<td align="right">6</td>
-<td align="right">0</td>
-<td align="right">1703.45</td>
-<td align="right">0.649999</td>
-<td align="right">3743300</td>
-<td align="left">26,153</td>
-</tr>
-<tr class="even">
-<td align="left">2020-05-13</td>
-<td align="right">32</td>
-<td align="right">50</td>
-<td align="right">6</td>
-<td align="right">0</td>
-<td align="right">1699.85</td>
-<td align="right">1.480000</td>
-<td align="right">4786100</td>
-<td align="left">26,153</td>
-</tr>
-<tr class="odd">
-<td align="left">2020-05-14</td>
-<td align="right">28</td>
-<td align="right">40</td>
-<td align="right">4</td>
-<td align="right">0</td>
-<td align="right">1716.40</td>
-<td align="right">1.140000</td>
-<td align="right">5610700</td>
-<td align="left">26,153</td>
-</tr>
-<tr class="even">
-<td align="left">2020-05-15</td>
-<td align="right">40</td>
-<td align="right">56</td>
-<td align="right">8</td>
-<td align="right">0</td>
-<td align="right">1734.85</td>
-<td align="right">0.470000</td>
-<td align="right">2939200</td>
-<td align="left">26,153</td>
-</tr>
-<tr class="odd">
 <td align="left">2020-05-18</td>
 <td align="right">44</td>
 <td align="right">10</td>
@@ -263,6 +219,39 @@ final_data &lt;-<span class="st"> </span><span class="kw">select</span>(all_data
 <td align="right">1735.25</td>
 <td align="right">0.990002</td>
 <td align="right">6465400</td>
+<td align="left">26,153</td>
+</tr>
+<tr class="odd">
+<td align="left">2020-05-20</td>
+<td align="right">40</td>
+<td align="right">40</td>
+<td align="right">14</td>
+<td align="right">0</td>
+<td align="right">1750.05</td>
+<td align="right">0.970000</td>
+<td align="right">4084300</td>
+<td align="left">26,153</td>
+</tr>
+<tr class="even">
+<td align="left">2020-05-21</td>
+<td align="right">50</td>
+<td align="right">48</td>
+<td align="right">16</td>
+<td align="right">0</td>
+<td align="right">1732.80</td>
+<td align="right">1.079999</td>
+<td align="right">3622300</td>
+<td align="left">26,153</td>
+</tr>
+<tr class="odd">
+<td align="left">2020-05-22</td>
+<td align="right">34</td>
+<td align="right">84</td>
+<td align="right">2</td>
+<td align="right">0</td>
+<td align="right">1732.45</td>
+<td align="right">0.969999</td>
+<td align="right">2896400</td>
 <td align="left">26,153</td>
 </tr>
 </tbody>

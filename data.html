@@ -24,7 +24,7 @@
 <meta name="author" content="Kelly T Slaughter" />
 
 
-<meta name="date" content="2020-05-21" />
+<meta name="date" content="2020-05-25" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -153,10 +153,10 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </h5>
 <p>We examine economic and social measures that vary with the price of gold. We speculate that good economic information results in lower gold prices and vice versa, under the premise that gold is seen as a store of value in uncertain times. We track changes in the price of gold to changes in the daily price of Tripwire (as unexpected economic news may curtail or encourage travel), monthly unemployment insurance, Tweets about vacations, and Reddit posts from the Stock Picks subreddit that reference the term ‘gold.’ We obtain this data via:</p>
 <ul>
-<li>The R package <code>Quandl</code><span class="citation">(Raymond McTaggart, Gergely Daroczi, and Clement Leung <a href="#ref-R-Quandl">2019</a>)</span> for commodity data (i.e., gold prices)</li>
-<li>The R package <code>quantmod</code><span class="citation">(Ryan and Ulrich <a href="#ref-R-quantmod">2020</a>)</span> for stock data (i.e., Tripwire)</li>
-<li>The R package <code>rtweet</code><span class="citation">(Kearney <a href="#ref-R-rtweet">2020</a>)</span> for Twitter data and the R package <code>RedditExtractoR</code><span class="citation">(Rivera <a href="#ref-R-RedditExtractoR">2019</a>)</span> for Reddit data</li>
-<li>The R package <code>httr</code><span class="citation">(Wickham <a href="#ref-R-httr">2019</a><a href="#ref-R-httr">a</a>)</span> for the Bureau of Economic Analysis data (i.e., unemployment insurance)</li>
+<li>The R package <strong>Quandl</strong><span class="citation">(Raymond McTaggart, Gergely Daroczi, and Clement Leung <a href="#ref-R-Quandl">2019</a>)</span> for commodity data (i.e., gold prices)</li>
+<li>The R package <strong>quantmod</strong><span class="citation">(Ryan and Ulrich <a href="#ref-R-quantmod">2020</a>)</span> for stock data (i.e., Tripwire)</li>
+<li>The R package <strong>rtweet</strong><span class="citation">(Kearney <a href="#ref-R-rtweet">2020</a>)</span> for Twitter data and the R package <strong>RedditExtractoR</strong><span class="citation">(Rivera <a href="#ref-R-RedditExtractoR">2019</a>)</span> for Reddit data</li>
+<li>The R package <strong>httr</strong><span class="citation">(Wickham <a href="#ref-R-httr">2019</a><a href="#ref-R-httr">a</a>)</span> for the Bureau of Economic Analysis data (i.e., unemployment insurance)</li>
 </ul>
 <p>Other sources of data ‘friendly’ to R can be found at <a href="https://www.computerworld.com/article/3109890/these-r-packages-import-sports-weather-stock-data-and-more.html">ComputerWorld R Packages for Data</a>.</p>
 <p>Other general sources of data available through API’s can be found at <a href="https://www.programmableweb.com/apis/directory" class="uri">https://www.programmableweb.com/apis/directory</a>.</p>
@@ -167,7 +167,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <h3><span class="header-section-number">2.1.1</span> Commodity Prices</h3>
 <p>Quandl is one of the most popular data sources that offers an API for data. Data sources available via API include:<a href="https://blog.quandl.com/api-for-commodity-data">Commodity Prices</a>, <a href="https://blog.quandl.com/api-for-stock-data">Stock Prices</a>, <a href="https://blog.quandl.com/api-for-currency-data">Currency Prices</a>, and <a href="https://blog.quandl.com/api-for-bitcoin-data">Bitcoin</a></p>
 <p>Create an account at <a href="https://www.quandl.com/sign-up" class="uri">https://www.quandl.com/sign-up</a> if you plan on using Quandl calls more than fifty times a day - Quandl will provide an API key.</p>
-<p>We use the function <code>Quandl</code> available after the <code>Quandl</code> library is loaded to obtain gold prices from April 15 to the most recent date. Note that the api_key is set to <code>Sys.getenv(&quot;QUANDL_KEY&quot;)</code>. It is bad practice to include the key in the code, so I have loaded the API key provided by Quandl into a systems variable stored in the project file <code>.Renviron</code> and retrieve it for use from the systems variables. <code>.Renviron</code> can be maintained via the <code>usethis</code> package using the command <code>usethis::edit_r_makevars()</code>).</p>
+<p>We use the function <code>Quandl()</code> available after the <strong>Quandl</strong> package is loaded to obtain gold prices from April 15 to the most recent date. Note that the api_key is set to <code>Sys.getenv(&quot;QUANDL_KEY&quot;)</code>. It is bad practice to include the key in the code, so I have loaded the API key provided by Quandl into a systems variable stored in the project file <code>.Renviron</code> and retrieve it for use from the systems variables. <code>.Renviron</code> can be maintained via the <strong>usethis</strong> package using the command <code>usethis::edit_r_makevars()</code>).</p>
 <p><em>Warning: Most API’s have limits for use (by frequency, volume, rows, etc.). Sometimes your data will not appear to change after calls due to this limitation.</em></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(Quandl)      
 
@@ -187,6 +187,24 @@ London_Gold_AM =<span class="st"> </span><span class="kw">Quandl</span>(<span cl
 </tr>
 </thead>
 <tbody>
+<tr class="odd">
+<td align="left">2020-05-22</td>
+<td align="right">1732.45</td>
+<td align="right">1733.55</td>
+<td align="right">1421.99</td>
+<td align="right">1423.59</td>
+<td align="right">1588.83</td>
+<td align="right">1590.71</td>
+</tr>
+<tr class="even">
+<td align="left">2020-05-21</td>
+<td align="right">1732.80</td>
+<td align="right">1724.90</td>
+<td align="right">1417.78</td>
+<td align="right">1410.45</td>
+<td align="right">1580.49</td>
+<td align="right">1571.04</td>
+</tr>
 <tr class="odd">
 <td align="left">2020-05-20</td>
 <td align="right">1750.05</td>
@@ -223,50 +241,32 @@ London_Gold_AM =<span class="st"> </span><span class="kw">Quandl</span>(<span cl
 <td align="right">1604.39</td>
 <td align="right">1602.60</td>
 </tr>
-<tr class="odd">
-<td align="left">2020-05-14</td>
-<td align="right">1716.40</td>
-<td align="right">1731.60</td>
-<td align="right">1403.67</td>
-<td align="right">1420.09</td>
-<td align="right">1587.84</td>
-<td align="right">1603.98</td>
-</tr>
-<tr class="even">
-<td align="left">2020-05-13</td>
-<td align="right">1699.85</td>
-<td align="right">1708.40</td>
-<td align="right">1383.85</td>
-<td align="right">1394.74</td>
-<td align="right">1568.11</td>
-<td align="right">1573.09</td>
-</tr>
 </tbody>
 </table>
 </div>
 <div id="stock-prices" class="section level3">
 <h3><span class="header-section-number">2.1.2</span> Stock Prices</h3>
-<p>We will use the <code>quantmod</code> R package to retrieve stock price data. We pass the stock price symbols and data ranges to Yahoo which returns the financial data. In our case, we ask for S&amp;P 500, Kelly Temp Services, Tripwire, and GrubHub stock prices from fifteen days (<code>Sys.Date() - 15</code>) ago to today (<code>Sys.Date()</code>). No API key is required. Note that <code>quantmod</code> relies on additional R packages - R will download these for us automatically.</p>
+<p>We will use the <strong>quantmod</strong> package to retrieve stock price data. We pass the stock price symbols and data ranges to Yahoo which returns the financial data. In our case, we ask for S&amp;P 500, Kelly Temp Services, Tripwire, and GrubHub stock prices from fifteen days (<code>Sys.Date() - 15</code>) ago to today (<code>Sys.Date()</code>). No API key is required. Note that <strong>quantmod</strong> relies on additional R packages - R will download these for us automatically.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(quantmod)      <span class="co"># retrieve financial data (used for function via getSymbols) (masks as.Date from base R) </span>
 
 stock_data &lt;-<span class="st"> </span><span class="kw">getSymbols</span>(<span class="kw">c</span>(<span class="st">&quot;^GSPC&quot;</span>, <span class="st">&quot;KELYA&quot;</span>, <span class="st">&quot;TRIP&quot;</span>, <span class="st">&quot;GRUB&quot;</span>), <span class="co"># KELYA = Kelly Services, TRIP = Trip Advisor, GRUB = Grubhub</span>
                          <span class="dt">src =</span> <span class="st">&#39;yahoo&#39;</span>, 
                          <span class="dt">from =</span> (<span class="kw">Sys.Date</span>() <span class="op">-</span><span class="st"> </span><span class="dv">15</span>),
                          <span class="dt">to =</span> <span class="kw">Sys.Date</span>()) </code></pre></div>
-<p>Unlike the data returned via <code>Quandl</code>, the data returned from <code>quantmod</code> needs some manipulation to be ready for use. As we asked for four different prices, <code>quantmod</code> returned a structure with four sets of data nested within. Execute the command <code>head(stock_data)</code> in the Console to see the four structures’ names.</p>
-<p>We will load three libraries - <code>dplyr</code><span class="citation">(Wickham, François, et al. <a href="#ref-R-dplyr">2020</a>)</span>, <code>broom</code><span class="citation">(Robinson and Hayes <a href="#ref-R-broom">2020</a>)</span>, and <code>tidyr</code><span class="citation">(Wickham and Henry <a href="#ref-R-tidyr">2020</a>)</span> - that will allow us to extract and manipulate the data into a form usable for analysis. We first pull the Tripwire data from the <code>stock_data</code> structure via the <code>tidy</code> command, then convert the data from a ‘long’ format to a ‘wide’ format via the <code>spread</code> command.</p>
+<p>Unlike the data returned via <code>Quandl()</code>, the data returned from <code>quantmod()</code> needs some manipulation to be ready for use. As we asked for four different prices, <code>quantmod()</code> returned a structure with four sets of data nested within. Execute the command <code>head(stock_data)</code> in the Console to see the four structures’ names.</p>
+<p>We will load three libraries - <strong>dplyr</strong><span class="citation">(Wickham, François, et al. <a href="#ref-R-dplyr">2020</a>)</span>, <strong>broom</strong><span class="citation">(Robinson and Hayes <a href="#ref-R-broom">2020</a>)</span>, and <strong>tidyr</strong><span class="citation">(Wickham and Henry <a href="#ref-R-tidyr">2020</a>)</span> - that will allow us to extract and manipulate the data into a form usable for analysis. We first pull the Tripwire data from the <code>stock_data</code> structure via the <code>tidy()</code> command, then convert the data from a ‘long’ format to a ‘wide’ format via the <code>spread()</code> command.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(broom)   <span class="co"># tidy function</span>
 <span class="kw">library</span>(tidyr)   <span class="co"># spread function</span>
 
 TRIP_tidy &lt;-<span class="st"> </span><span class="kw">tidy</span>(TRIP) <span class="co"># tidy from broom package converts list to &quot;long&quot; data frame for DJI </span>
 
 TRIP_wide &lt;-<span class="st"> </span><span class="kw">spread</span>(TRIP_tidy, series, value) <span class="co"># spread from tidyr; converts long to wide using series values for new columns; that is, turn series row values to new columns</span></code></pre></div>
-<p>We want to explore not the absolute price of Tripwire stock on a given day but the difference between its high and low price. We will need a new variable we will call <code>Trip.Diff</code> (to stay consistent with the naming convention of <code>quantmod</code>) and add this new variable to the data set via the <code>mutate</code> function provided through the <code>dplyr</code> package.</p>
+<p>We want to explore not the absolute price of Tripwire stock on a given day but the difference between its high and low price. We will need a new variable we will call <code>Trip.Diff</code> (to stay consistent with the naming convention of <strong>quantmod</strong> which does not following convention - dot notation is generally discouraged in R) and add this new variable to the data set via the <code>mutate()</code> function provided through the <strong>dplyr</strong> package.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(dplyr)   <span class="co"># for mutate function (may already be loaded, but loading twice will not create an error)</span>
 
 <span class="co"># The change in price during the day may be of interest</span>
 TRIP_wide &lt;-<span class="st"> </span>TRIP_wide <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">TRIP.Diff =</span> TRIP.High <span class="op">-</span><span class="st"> </span>TRIP.Low)</code></pre></div>
-<p>The first few rows of the Tripwire data are displayed in Table <a href="data.html#tab:Tripwire-Data-Table">2.2</a> as rendered through the package <code>knitr</code><span class="citation">(Xie <a href="#ref-R-knitr">2020</a><a href="#ref-R-knitr">c</a>)</span>.</p>
+<p>The first few rows of the Tripwire data are displayed in Table <a href="data.html#tab:Tripwire-Data-Table">2.2</a> as rendered through the package <strong>knitr</strong><span class="citation">(Xie <a href="#ref-R-knitr">2020</a><a href="#ref-R-knitr">b</a>)</span>.</p>
 <table>
 <caption><span id="tab:Tripwire-Data-Table">Table 2.2: </span>First Few Rows of Financial Data Set</caption>
 <thead>
@@ -283,36 +283,6 @@ TRIP_wide &lt;-<span class="st"> </span>TRIP_wide <span class="op">%&gt;%</span>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">2020-05-06</td>
-<td align="right">18.09</td>
-<td align="right">18.09</td>
-<td align="right">18.59</td>
-<td align="right">17.58</td>
-<td align="right">18.14</td>
-<td align="right">2541300</td>
-<td align="right">1.010000</td>
-</tr>
-<tr class="even">
-<td align="left">2020-05-07</td>
-<td align="right">18.72</td>
-<td align="right">18.72</td>
-<td align="right">18.92</td>
-<td align="right">18.31</td>
-<td align="right">18.55</td>
-<td align="right">3537000</td>
-<td align="right">0.610001</td>
-</tr>
-<tr class="odd">
-<td align="left">2020-05-08</td>
-<td align="right">17.91</td>
-<td align="right">17.91</td>
-<td align="right">18.90</td>
-<td align="right">17.50</td>
-<td align="right">18.05</td>
-<td align="right">6450900</td>
-<td align="right">1.400000</td>
-</tr>
-<tr class="even">
 <td align="left">2020-05-11</td>
 <td align="right">16.70</td>
 <td align="right">16.70</td>
@@ -322,7 +292,7 @@ TRIP_wide &lt;-<span class="st"> </span>TRIP_wide <span class="op">%&gt;%</span>
 <td align="right">4766500</td>
 <td align="right">1.110001</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">2020-05-12</td>
 <td align="right">16.90</td>
 <td align="right">16.90</td>
@@ -332,7 +302,7 @@ TRIP_wide &lt;-<span class="st"> </span>TRIP_wide <span class="op">%&gt;%</span>
 <td align="right">3743300</td>
 <td align="right">0.649999</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">2020-05-13</td>
 <td align="right">15.59</td>
 <td align="right">15.59</td>
@@ -341,6 +311,36 @@ TRIP_wide &lt;-<span class="st"> </span>TRIP_wide <span class="op">%&gt;%</span>
 <td align="right">16.76</td>
 <td align="right">4786100</td>
 <td align="right">1.480000</td>
+</tr>
+<tr class="even">
+<td align="left">2020-05-14</td>
+<td align="right">15.61</td>
+<td align="right">15.61</td>
+<td align="right">15.67</td>
+<td align="right">14.53</td>
+<td align="right">15.20</td>
+<td align="right">5610700</td>
+<td align="right">1.140000</td>
+</tr>
+<tr class="odd">
+<td align="left">2020-05-15</td>
+<td align="right">15.66</td>
+<td align="right">15.66</td>
+<td align="right">15.78</td>
+<td align="right">15.31</td>
+<td align="right">15.40</td>
+<td align="right">2939200</td>
+<td align="right">0.470000</td>
+</tr>
+<tr class="even">
+<td align="left">2020-05-18</td>
+<td align="right">19.02</td>
+<td align="right">19.02</td>
+<td align="right">19.25</td>
+<td align="right">16.46</td>
+<td align="right">16.47</td>
+<td align="right">8243600</td>
+<td align="right">2.790001</td>
 </tr>
 </tbody>
 </table>
@@ -353,8 +353,8 @@ TRIP_wide &lt;-<span class="st"> </span>TRIP_wide <span class="op">%&gt;%</span>
 <h3><span class="header-section-number">2.2.1</span> Twitter</h3>
 <p>Twitter requires registration in the form of an ‘application’ to use its API. Tweets that are public and can be searched via an API by keyword or account. Twitter does impose restrictions on the API use, e.g., limiting the number of calls per minute and the number of tweets returned.</p>
 <p>Twitter uses <a href="https://en.wikipedia.org/wiki/OAuth">OAuth 1.0 tokens</a> for authorization. You will need a consumer key, a consumer secret, an access token, and an access secret (basically, you need five character strings). Set up instructions can be found at <a href="https://cran.r-project.org/web/packages/rtweet/vignettes/auth.html" class="uri">https://cran.r-project.org/web/packages/rtweet/vignettes/auth.html</a>.</p>
-<p>We will use the command <code>search_tweets</code> via the <code>rtweet</code> package to retrieve Twitter data by keywords. If you select a very broad term for search (e.g., “election”) you might only retrieve data from the last few hours. If you select a more obscure term (e.g., “kakorrhaphiophobia”) you still can only retrieve Tweets up to seven days old when using the free Twitter account.</p>
-<p>We first set parameter values for the call to <code>search_tweets</code>, using the same technique for loading the token values, setting the search string to <em>Caribbean</em> and / or <em>vacation</em>, and limit the number of returned tweets to 1,000. The data returned is accessible through the <code>vacation_tweets</code> variable.</p>
+<p>We will use the command <code>search_tweets()</code> via the <strong>rtweet</strong> package to retrieve Twitter data by keywords. If you select a very broad term for search (e.g., “election”) you might only retrieve data from the last few hours. If you select a more obscure term (e.g., “kakorrhaphiophobia”) you still can only retrieve Tweets up to seven days old when using the free Twitter account.</p>
+<p>We first set parameter values for the call to <code>search_tweets()</code>, using the same technique for loading the token values, setting the search string to <em>Caribbean</em> and / or <em>vacation</em>, and limit the number of returned tweets to 1,000. The data returned is accessible through the <code>vacation_tweets</code> variable.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(httpuv) <span class="co"># for browser based twitter authentication</span>
 <span class="kw">library</span>(rtweet) 
 
@@ -430,7 +430,7 @@ vacation_tweets_df &lt;-<span class="st"> </span><span class="kw">tibble</span>(
                                  <span class="dt">text =</span> vacation_tweets<span class="op">$</span>text, 
                                  <span class="dt">favorite_count =</span> vacation_tweets<span class="op">$</span>favorite_count, 
                                  <span class="dt">retweet_count =</span> vacation_tweets<span class="op">$</span>retweet_count) <span class="co"># tibble keeps the text from defaulting to factor</span></code></pre></div>
-<p>Twitter also allows searches by account via the command <code>get_timeline</code>. In the code below (which is not executred), tweets sent by the news service <em>Business Wire</em> would be captured and added to the <code>vacation_tweets_df</code>.</p>
+<p>Twitter also allows searches by account via the command <code>get_timeline()</code>. In the code below (which is not executred), tweets sent by the news service <em>Business Wire</em> would be captured and added to the <code>vacation_tweets_df</code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">NewsFromBW_tweets &lt;-<span class="st"> </span><span class="kw">get_timeline</span>(<span class="st">&quot;NewsFromBW&quot;</span>, <span class="dt">n =</span> Kmax_number_of_tweets)
 NewsFromBW_tweets_df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">created_at =</span> NewsFromBW_tweets<span class="op">$</span>created_at, <span class="dt">text =</span> NewsFromBW_tweets<span class="op">$</span>text, <span class="dt">favorite_count =</span> NewsFromBW_tweets<span class="op">$</span>favorite_count, <span class="dt">retweet_count =</span> NewsFromBW_tweets<span class="op">$</span>retweet_count)
 
@@ -443,17 +443,17 @@ vacation_tweets_df<span class="op">$</span>text &lt;-<span class="st"> </span><s
 <pre><code>## # A tibble: 6 x 4
 ##   created_at          text                          favorite_count retweet_count
 ##   &lt;dttm&gt;              &lt;chr&gt;                                  &lt;int&gt;         &lt;int&gt;
-## 1 2020-05-21 13:29:34 &quot;How Aruba Is Adapting for t~              0             0
-## 2 2020-05-13 13:47:23 &quot;Aruba Is Planning to Reopen~              0             0
-## 3 2020-05-21 13:01:58 &quot;Follow us on FB or IG to ex~              0             0
-## 4 2020-05-21 12:16:33 &quot;@cryptohodler16 Barry Gibb ~              1             0
-## 5 2020-05-21 11:01:57 &quot;Are you visiting Jamaica th~              0             0
-## 6 2020-05-20 11:03:39 &quot;A picture tells a thousand ~              1             0</code></pre>
+## 1 2020-05-25 22:59:35 &quot;Kelly Ripa and Mark Consuel~              8             0
+## 2 2020-05-25 21:10:36 &quot;Excited to see the islands ~              0             0
+## 3 2020-05-25 20:29:53 &quot;thinking about how at the b~              5             0
+## 4 2020-05-25 19:35:32 &quot;We will be together soon! T~              0             0
+## 5 2020-05-25 19:03:29 &quot;If you are looking for a cr~              0             0
+## 6 2020-05-25 18:34:10 &quot;Enjoy a Caribbean vacation ~              0             0</code></pre>
 <p><font size="2"><em>No values appearing in the ‘favorite_count’ and ‘retweet_count’ may indicate values of zero</em></font></p>
 </div>
 <div id="reddit" class="section level3">
 <h3><span class="header-section-number">2.2.2</span> Reddit</h3>
-<p>Reddit does not require an API key. Using the function <code>get_reddit</code> from the package <code>RedditExtractoR</code>, we will obtain posts from the rubReddit <em>stock picks</em>, searching by the terms <em>gold</em> and _a few other terms <em>silver</em>.</p>
+<p>Reddit does not require an API key. Using the function <code>get_reddit()</code> from the package <strong>RedditExtractoR</strong>, we will obtain posts from the rubReddit <em>stock picks</em>, searching by the terms <em>gold</em> and _a few other terms <em>silver</em>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(RedditExtractoR)
    
 reddit_data =<span class="st"> </span><span class="kw">get_reddit</span>(<span class="dt">search_terms =</span> <span class="st">&quot;gold silver&quot;</span>, <span class="dt">subreddit =</span> <span class="st">&quot;stock_picks&quot;</span>, <span class="dt">sort_by =</span> <span class="st">&quot;new&quot;</span>) <span class="co"># returns text as chr, not factor</span></code></pre></div>
@@ -482,7 +482,7 @@ reddit_data =<span class="st"> </span><span class="kw">get_reddit</span>(<span c
 <hr>
 <div id="unemployment-insurance" class="section level3">
 <h3><span class="header-section-number">2.3.1</span> Unemployment Insurance</h3>
-<p>While an R <code>BEA</code> package exists for pulling data, I have had some issues using it (it has not been updated in a couple of years; meanwhile, the public sites offering data undergo frequent updates). So instead we will use a more generic solution, a RESTful pull via the R <code>httr</code> package (supporting cURL-like access to sites). We will ‘ask’ that the data is returned in a JSON (vs XML), a format that will need to be changed for use in R. Accordingly, we will use the R package <code>jsonlite</code> to convert the data into a wide format called a data frame or tibble. The documentation for the packages can be found at:</p>
+<p>While an <strong>BEA</strong> package exists for pulling data, I have had some issues using it (it has not been updated in a couple of years; meanwhile, the public sites offering data undergo frequent updates). So instead we will use a more generic solution, a RESTful pull via the <strong>httr</strong> package (supporting cURL-like access to sites). We will ‘ask’ that the data is returned in a JSON (vs XML), a format that will need to be changed for use in R. Accordingly, we will use the package <strong>jsonlite</strong> to convert the data into a wide format called a data frame or tibble. The documentation for the packages can be found at:</p>
 <ul>
 <li><a href="https://cran.r-project.org/web/packages/httr/" class="uri">https://cran.r-project.org/web/packages/httr/</a></li>
 <li><a href="https://cran.r-project.org/web/packages/jsonlite" class="uri">https://cran.r-project.org/web/packages/jsonlite</a></li>
@@ -624,7 +624,7 @@ BEA_tibble &lt;-<span class="st"> </span><span class="kw">tibble</span>(BEA_resp
 <p>Wickham, Hadley, Romain François, Lionel Henry, and Kirill Müller. 2020. <em>Dplyr: A Grammar of Data Manipulation</em>. <a href="https://CRAN.R-project.org/package=dplyr" class="uri">https://CRAN.R-project.org/package=dplyr</a>.</p>
 </div>
 <div id="ref-R-knitr">
-<p>Xie, Yihui. 2020c. <em>Knitr: A General-Purpose Package for Dynamic Report Generation in R</em>. <a href="https://CRAN.R-project.org/package=knitr" class="uri">https://CRAN.R-project.org/package=knitr</a>.</p>
+<p>Xie, Yihui. 2020b. <em>Knitr: A General-Purpose Package for Dynamic Report Generation in R</em>. <a href="https://CRAN.R-project.org/package=knitr" class="uri">https://CRAN.R-project.org/package=knitr</a>.</p>
 </div>
 </div>
             </section>

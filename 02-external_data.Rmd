@@ -4,10 +4,10 @@
 
 We examine economic and social measures that vary with the price of gold. We speculate that good economic information results in lower gold prices and vice versa, under the premise that gold is seen as a store of value in uncertain times. We track changes in the price of gold to changes in the daily price of Tripwire (as unexpected economic news may curtail or encourage travel), monthly unemployment insurance, Tweets about vacations, and Reddit posts from the Stock Picks subreddit that reference the term 'gold.' We obtain this data via:
 
-* The R package `Quandl`[@R-Quandl] for commodity data (i.e., gold prices)
-* The R package `quantmod`[@R-quantmod] for stock data (i.e., Tripwire)
-* The R package `rtweet`[@R-rtweet] for Twitter data and the R package `RedditExtractoR`[@R-RedditExtractoR] for Reddit data
-* The R package `httr`[@R-httr] for the Bureau of Economic Analysis data (i.e., unemployment insurance)
+* The R package **Quandl**[@R-Quandl] for commodity data (i.e., gold prices)
+* The R package **quantmod**[@R-quantmod] for stock data (i.e., Tripwire)
+* The R package **rtweet**[@R-rtweet] for Twitter data and the R package **RedditExtractoR**[@R-RedditExtractoR] for Reddit data
+* The R package **httr**[@R-httr] for the Bureau of Economic Analysis data (i.e., unemployment insurance)
 
 Other sources of data 'friendly' to R can be found at [ComputerWorld R Packages for Data](https://www.computerworld.com/article/3109890/these-r-packages-import-sports-weather-stock-data-and-more.html). 
 
@@ -21,7 +21,7 @@ Quandl is one of the most popular data sources that offers an API for data. Data
 
 Create an account at https://www.quandl.com/sign-up if you plan on using Quandl calls more than fifty times a day - Quandl will provide an API key. 
 
-We use the function `Quandl` available after the `Quandl` library is loaded to obtain gold prices from April 15 to the most recent date. Note that the api_key is set to `Sys.getenv("QUANDL_KEY")`. It is bad practice to include the key in the code, so I have loaded the API key provided by Quandl into a systems variable stored in the project file `.Renviron` and retrieve it for use from the systems variables. `.Renviron` can be maintained via the `usethis` package using the command `usethis::edit_r_makevars()`).
+We use the function `Quandl()` available after the **Quandl** package is loaded to obtain gold prices from April 15 to the most recent date. Note that the api_key is set to `Sys.getenv("QUANDL_KEY")`. It is bad practice to include the key in the code, so I have loaded the API key provided by Quandl into a systems variable stored in the project file `.Renviron` and retrieve it for use from the systems variables. `.Renviron` can be maintained via the **usethis** package using the command `usethis::edit_r_makevars()`).
 
 _Warning: Most API's have limits for use (by frequency, volume, rows, etc.). Sometimes your data will not appear to change after calls due to this limitation._
 
@@ -45,8 +45,8 @@ kable(head(London_Gold_AM), caption = "First Few Rows of Financial Data Set Quan
 
 ###Stock Prices
 
-We will use the `quantmod` R package to retrieve stock price data. We pass the stock price symbols and data ranges to Yahoo which returns the financial data. In our case, we ask for S&P 500, Kelly Temp Services, Tripwire, and GrubHub stock prices from fifteen days (`Sys.Date() - 15`) ago to today (`Sys.Date()`).
-No API key is required. Note that `quantmod` relies on additional R packages - R will download these for us automatically.
+We will use the **quantmod** package to retrieve stock price data. We pass the stock price symbols and data ranges to Yahoo which returns the financial data. In our case, we ask for S&P 500, Kelly Temp Services, Tripwire, and GrubHub stock prices from fifteen days (`Sys.Date() - 15`) ago to today (`Sys.Date()`).
+No API key is required. Note that **quantmod** relies on additional R packages - R will download these for us automatically.
 
 ```{r Obtain-Financial-Data, message = FALSE, warning = FALSE}
 
@@ -59,9 +59,9 @@ stock_data <- getSymbols(c("^GSPC", "KELYA", "TRIP", "GRUB"), # KELYA = Kelly Se
 
 ```
 
-Unlike the data returned via `Quandl`, the data returned from `quantmod` needs some manipulation to be ready for use. As we asked for four different prices, `quantmod` returned a structure with four sets of data nested within. Execute the command `head(stock_data)` in the Console to see the four structures' names. 
+Unlike the data returned via `Quandl()`, the data returned from `quantmod()` needs some manipulation to be ready for use. As we asked for four different prices, `quantmod()` returned a structure with four sets of data nested within. Execute the command `head(stock_data)` in the Console to see the four structures' names. 
 
-We will load three libraries - `dplyr`[@R-dplyr], `broom`[@R-broom], and `tidyr`[@R-tidyr] - that will allow us to extract and manipulate the data into a form usable for analysis. We first pull the Tripwire data from the `stock_data` structure via the `tidy` command, then convert the data from a 'long' format to a 'wide' format via the `spread` command.
+We will load three libraries - **dplyr**[@R-dplyr], **broom**[@R-broom], and **tidyr**[@R-tidyr] - that will allow us to extract and manipulate the data into a form usable for analysis. We first pull the Tripwire data from the `stock_data` structure via the `tidy()` command, then convert the data from a 'long' format to a 'wide' format via the `spread()` command.
 
 ```{r Reformat-Financial-Data, message = FALSE, warning = FALSE}
 
@@ -74,7 +74,7 @@ TRIP_wide <- spread(TRIP_tidy, series, value) # spread from tidyr; converts long
 
 ```
 
-We want to explore not the absolute price of Tripwire stock on a given day but the difference between its high and low price. We will need a new variable we will call `Trip.Diff` (to stay consistent with the naming convention of `quantmod`) and add this new variable to the data set via the `mutate` function provided through the `dplyr` package.
+We want to explore not the absolute price of Tripwire stock on a given day but the difference between its high and low price. We will need a new variable we will call `Trip.Diff` (to stay consistent with the naming convention of **quantmod** which does not following convention - dot notation is generally discouraged in R) and add this new variable to the data set via the `mutate()` function provided through the **dplyr** package.
 
 ```{r Create-Trip.Diff, message = FALSE, warning = FALSE}
 
@@ -85,7 +85,7 @@ TRIP_wide <- TRIP_wide %>% mutate(TRIP.Diff = TRIP.High - TRIP.Low)
 
 ```
 
-The first few rows of the Tripwire data are displayed in Table \@ref(tab:Tripwire-Data-Table) as rendered through the package `knitr`[@R-knitr]. 
+The first few rows of the Tripwire data are displayed in Table \@ref(tab:Tripwire-Data-Table) as rendered through the package **knitr**[@R-knitr]. 
 
 ```{r Tripwire-Data-Table, echo = FALSE, results = 'asis'}
 
@@ -105,9 +105,9 @@ Twitter requires registration in the form of an 'application' to use its API. Tw
 
 Twitter uses [OAuth 1.0 tokens](https://en.wikipedia.org/wiki/OAuth) for authorization. You will need a consumer key, a consumer secret, an access token, and an access secret (basically, you need five character strings). Set up instructions can be found at https://cran.r-project.org/web/packages/rtweet/vignettes/auth.html. 
 
-We will use the command `search_tweets` via the `rtweet` package to retrieve Twitter data by keywords. If you select a very broad term for search (e.g., "election") you might only retrieve data from the last few hours. If you select a more obscure term (e.g., "kakorrhaphiophobia") you still can only retrieve Tweets up to seven days old when using the free Twitter account. 
+We will use the command `search_tweets()` via the **rtweet** package to retrieve Twitter data by keywords. If you select a very broad term for search (e.g., "election") you might only retrieve data from the last few hours. If you select a more obscure term (e.g., "kakorrhaphiophobia") you still can only retrieve Tweets up to seven days old when using the free Twitter account. 
 
-We first set parameter values for the call to `search_tweets`, using the same technique for loading the token values, setting the search string to _Caribbean_ and / or _vacation_, and limit the number of returned tweets to 1,000. The data returned is accessible through the `vacation_tweets` variable.
+We first set parameter values for the call to `search_tweets()`, using the same technique for loading the token values, setting the search string to _Caribbean_ and / or _vacation_, and limit the number of returned tweets to 1,000. The data returned is accessible through the `vacation_tweets` variable.
 
 ```{r Obtain-Social-Data-by-Keywords, message = FALSE, warning = FALSE}
 
@@ -156,7 +156,7 @@ vacation_tweets_df <- tibble(created_at = vacation_tweets$created_at,
 
 ```
 
-Twitter also allows searches by account via the command `get_timeline`. In the code below (which is not executred), tweets sent by the news service _Business Wire_ would be captured and added to the `vacation_tweets_df`.
+Twitter also allows searches by account via the command `get_timeline()`. In the code below (which is not executred), tweets sent by the news service _Business Wire_ would be captured and added to the `vacation_tweets_df`.
 
 ```{r Obtain-Social-Data-by-User, eval = FALSE}
 
@@ -185,7 +185,7 @@ head(vacation_tweets_df)
 
 ###Reddit
 
-Reddit does not require an API key. Using the function `get_reddit` from the package `RedditExtractoR`, we will obtain posts from the rubReddit _stock picks_, searching by the terms _gold_ and _a few other terms _silver_. 
+Reddit does not require an API key. Using the function `get_reddit()` from the package **RedditExtractoR**, we will obtain posts from the rubReddit _stock picks_, searching by the terms _gold_ and _a few other terms _silver_. 
 
 ```{r Obtain-Social-Data-Reddit, message = FALSE, warning = FALSE}
 
@@ -210,7 +210,7 @@ head(reddit_data[,c("comment")])
 
 ###Unemployment Insurance
 
-While an R `BEA` package exists for pulling data, I have had some issues using it (it has not been updated in a couple of years; meanwhile, the public sites offering data undergo frequent updates). So instead we will use a more generic solution, a RESTful pull via the R `httr` package (supporting cURL-like access to sites). We will 'ask' that the data is returned in a JSON (vs XML), a format that will need to be changed for use in R. Accordingly, we will use the R package `jsonlite` to convert the data into a wide format called a data frame or tibble. The documentation for the packages can be found at:
+While an **BEA** package exists for pulling data, I have had some issues using it (it has not been updated in a couple of years; meanwhile, the public sites offering data undergo frequent updates). So instead we will use a more generic solution, a RESTful pull via the **httr** package (supporting cURL-like access to sites). We will 'ask' that the data is returned in a JSON (vs XML), a format that will need to be changed for use in R. Accordingly, we will use the package **jsonlite** to convert the data into a wide format called a data frame or tibble. The documentation for the packages can be found at:
 
 * https://cran.r-project.org/web/packages/httr/
 * https://cran.r-project.org/web/packages/jsonlite
