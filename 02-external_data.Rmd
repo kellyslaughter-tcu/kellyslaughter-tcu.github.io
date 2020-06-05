@@ -13,9 +13,9 @@ Other sources of data 'friendly' to R can be found at [ComputerWorld R Packages 
 
 Other general sources of data available through API's can be found at https://www.programmableweb.com/apis/directory.  
 
-##Financial Data
+## Financial Data
 <hr> 
-###Commodity Prices
+### Commodity Prices
 
 Quandl is one of the most popular data sources that offers an API for data. Data sources available via API include:[Commodity Prices](https://blog.quandl.com/api-for-commodity-data), [Stock Prices](https://blog.quandl.com/api-for-stock-data), [Currency Prices](https://blog.quandl.com/api-for-currency-data), and [Bitcoin](https://blog.quandl.com/api-for-bitcoin-data)
 
@@ -29,7 +29,7 @@ _Warning: Most API's have limits for use (by frequency, volume, rows, etc.). Som
 
 library(Quandl)      
 
-London_Gold_AM = Quandl("LBMA/GOLD", start_date="2020-04-15", api_key = Sys.getenv("QUANDL_KEY"))
+London_Gold_AM <- Quandl(code = "LBMA/GOLD", start_date = "2020-04-15", api_key = Sys.getenv("QUANDL_KEY"))
 
 ```
 
@@ -43,7 +43,7 @@ kable(head(London_Gold_AM), caption = "First Few Rows of Financial Data Set Quan
 
 ```
 
-###Stock Prices
+### Stock Prices
 
 We will use the **quantmod** package to retrieve stock price data. We pass the stock price symbols and data ranges to Yahoo which returns the financial data. In our case, we ask for S&P 500, Kelly Temp Services, Tripwire, and GrubHub stock prices from fifteen days (`Sys.Date() - 15`) ago to today (`Sys.Date()`).
 No API key is required. Note that **quantmod** relies on additional R packages - R will download these for us automatically.
@@ -52,7 +52,7 @@ No API key is required. Note that **quantmod** relies on additional R packages -
 
 library(quantmod)      # retrieve financial data (used for function via getSymbols) (masks as.Date from base R) 
 
-stock_data <- getSymbols(c("^GSPC", "KELYA", "TRIP", "GRUB"), # KELYA = Kelly Services, TRIP = Trip Advisor, GRUB = Grubhub
+getSymbols(c("^GSPC", "KELYA", "TRIP", "GRUB"), # KELYA = Kelly Services, TRIP = Trip Advisor, GRUB = Grubhub
                          src = 'yahoo', 
                          from = (Sys.Date() - 15),
                          to = Sys.Date()) 
@@ -99,7 +99,7 @@ kable(head(TRIP_wide), caption = "First Few Rows of Financial Data Set")
 ##Social Media Data
 <hr> 
 
-###Twitter
+### Twitter
 
 Twitter requires registration in the form of an 'application' to use its API. Tweets that are public and can be searched via an API by keyword or account. Twitter does impose restrictions on the API use, e.g., limiting the number of calls per minute and the number of tweets returned.
 
@@ -183,7 +183,7 @@ head(vacation_tweets_df)
 
 <font size="2">_No values appearing in the 'favorite_count' and 'retweet_count' may indicate values of zero_</font>
 
-###Reddit
+### Reddit
 
 Reddit does not require an API key. Using the function `get_reddit()` from the package **RedditExtractoR**, we will obtain posts from the rubReddit _stock picks_, searching by the terms _gold_ and _a few other terms _silver_. 
 
@@ -205,10 +205,10 @@ head(reddit_data[,c("comment")])
 ```
 
 
-##Economic Data
+## Economic Data
 <hr> 
 
-###Unemployment Insurance
+### Unemployment Insurance
 
 While an **BEA** package exists for pulling data, I have had some issues using it (it has not been updated in a couple of years; meanwhile, the public sites offering data undergo frequent updates). So instead we will use a more generic solution, a RESTful pull via the **httr** package (supporting cURL-like access to sites). We will 'ask' that the data is returned in a JSON (vs XML), a format that will need to be changed for use in R. Accordingly, we will use the package **jsonlite** to convert the data into a wide format called a data frame or tibble. The documentation for the packages can be found at:
 

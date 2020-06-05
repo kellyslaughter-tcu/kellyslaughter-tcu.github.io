@@ -16,7 +16,7 @@ library(bbplot) # devtools::install_github('bbc/bbplot') # Not all packages are 
 
 Some visualizations are more readily generated from long formats rather than wide formats. In the chunk below, we use the **dplyr** `select()` function to pull the four values we want to use for visualizations into a new data set called `final_data_long` (still in a wide format). We want to plot values like gold prices and number of tweets together, but the scale of the two is dramatically different. To remedy this issue, we use the `scale` command on each value which 'centers' the data (makes the middle value zero and adjusts the other values accordingly) and the divides the values by the value's standard deviation. The result are sets of values with similar values.
 
-Finally, we call the `gather()` function from **dplyr** (note that the code assumes we have already loaded **dplyr** into memory) to transition from wide to long.
+Finally, we call the `gather()` function from **tidyrr** to transition from wide to long.
 
 ```{r Final-Data-Long, message = FALSE, warning = FALSE}
 

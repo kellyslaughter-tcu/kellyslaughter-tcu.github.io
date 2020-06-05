@@ -14,7 +14,7 @@ vacation_reddit_tt <- reddit_data[1:2,] %>% unnest_tokens(word, comment)
 
 ```
 
-stop_words include:
+Stop words are "contextless" words that provide more clutter than information and are often removed from the text before analysis. stop_words include:
 
 * a
 * about
@@ -86,8 +86,8 @@ sentiment_data_by_date <- social_data_count_by_date_word %>%
                           group_by(created_at) %>% 
                           summarise(n = n(),                                    # social media count
                                     total_sentiment = sum(value),               # sum of sentiment
-                                    negative_words = length(value[value < 0]),  # occurences of negative workds
-                                    Paris_count = length(word[word == 'Paris']) # occurences of the word 'Paris'
+                                    negative_words = length(value[value < 0]),  # occurrences of negative words
+                                    Paris_count = length(word[word == 'Paris']) # occurrences of the word 'Paris'
                                     )
 
 ```
