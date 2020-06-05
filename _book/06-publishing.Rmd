@@ -1,0 +1,29 @@
+# Publishing
+
+<h5>[rmd version of file](06-publishing.Rmd)</h5> 
+
+The `rmd` files we have used for the project can be rendered as PDFs, Word documents, html files, and markdown (md) documents. Some `rmd` formatting syntax and options can be found at https://rstudio.com/wp-content/uploads/2016/03/rmarkdown-cheatsheet-2.0.pdf. A tutorial for `rmd` can be found at https://rmarkdown.rstudio.com/lesson-1.html. The syntax is consistent with the [Pandoc](https://en.wikipedia.org/wiki/Pandoc) standards. The most important formatting decision will be whether code is executed and displayed. These choices can be controlled as:
+
+* include = FALSE: blocks code and results from appearing but the code still executes
+* results = HIDE: blocks code and results.
+* echo = FALSE blocks the code from appearing but the code still executes (often used for visualizations).
+* message = FALSE: blocks messages.
+* warning = FALSE: blocks warnings.
+* eval = FALSE: Code appears but is not executed.
+
+The **bookdown*`**[@R-bookdown] package should be installed (`devtools::install_github("rstudio/bookdown")`) to create the book version of the project (see https://bookdown.org/yihui/bookdown/ for details). You may also need install the package **TinyTeX** (which includes XeLaTeX), then run the command `tinytex::install_tinytex()`. For further details, see https://yihui.name/tinytex/. Each `rmd` file contains one and only one chapter, and a chapter is defined by the first-level heading `#`.
+
+Some issues to look for include:
+
+* Social media includes escape codes
+* Extraneous files in the project folder (especially `_main`).
+
+## Bibliography
+
+```{r Bibliography, echo = FALSE, message = FALSE, warning = FALSE}
+
+# automatically create a bib database for R packages
+write_bib(c(.packages(), 'bookdown', 'knitr', 'rmarkdown'), 'packages.bib')
+
+```
+
