@@ -1,13 +1,12 @@
----
-title: "Short-Version"
-output: html_document
----
+# Short Version {#short}
 
-# Short Version of Developing Visualizations from External Data
+<h5>[rmd version of file](07-short-version.Rmd)</h5>
 
-<h5>[rmd version of file](short-version.Rmd)</h5> 
+## Prep
 
-```{r Packages, message = FALSE, warning = FALSE}
+Load the packages listed below. Note that the **bbplot** package is not available via CRAN and must be downloaded via the `install_github('bbc/bbplot')`, available via the **devtools** package.
+
+```{r Packages-SV, message = FALSE, warning = FALSE}
 
 library(quantmod)  # for getSymbols() function
 library(broom)     # for tidy() function  
@@ -15,27 +14,27 @@ library(tidyr)     # for spread() function
 library(httpuv)    # for browser based twitter authentication
 library(rtweet)    # for search_tweets() function
 library(tidytext)  # for unnest_tokens() function and stop_words data set
-library(dplyr)     # form inner_join() and anti_join() functions
-library(lubridate) # for the  as_date() function
+library(dplyr)     # for inner_join() and anti_join() functions
+library(lubridate) # for the as_date() function
 library(textdata)  # for the afinn lexicon (sentiment scores for words)
 library(ggplot2)   # for ggplot() function
-library(bbplot)    # devtools::install_github('bbc/bbplot') # Not all packages are available via CRAN; run once after installing devtools package
+library(bbplot)    # for plot formatting
 
 ```
 
-### Step 1 - Microsoft Data
+## Step 1 - Microsoft Data
 
-Let's pull stock data on Microsoft for the last two weeks, i.e., from today (`Sys.Date()`) to two weeks ago (`Sys.Date() - 15`). The Microsoft trading symbol is **MSFT** 
+Let's pull stock data on Microsoft for the last two weeks, i.e., from today (`Sys.Date()`) to fifteen days ago (`Sys.Date() - 15`). The Microsoft trading symbol is **MSFT**. 
 
-```{r Obtain-Financial-Data, message = FALSE, warning = FALSE}
+```{r Obtain-Financial-Data-SV, message = FALSE, warning = FALSE}
 
 getSymbols(Symbols = c("MSFT"), src = 'yahoo', from = (Sys.Date() - 15), to = Sys.Date()) 
 
 ```
 
-We now have stock price data in a variable called `MSFT`. This variable is a data type called `xts`. We will change is to a data type called `tibble` using the `tidy()` command from the **broom** package and the `spread()` command from the **tidyr** package. After executing the commands, we will have a table of data called `MSFT_change` with a change of the price for each date. 
+We now have stock price data in a variable called `MSFT`. This variable is a data type called `xts`. We will change the data type to a type called `tibble` using the `tidy()` command from the **broom** package and the `spread()` command from the **tidyr** package. After executing the commands, we will have a table of data called `MSFT_change` with a change of the stock price for each date. 
 
-```{r Reformat-Stock-Data, message = FALSE, warning = FALSE}
+```{r Reformat-Stock-Data-SV, message = FALSE, warning = FALSE}
 
 MSFT_tidy <- tidy(MSFT) 
 MSFT_wide <- spread(MSFT_tidy, series, value) 
@@ -44,11 +43,11 @@ MSFT_change <- select(MSFT_wide, index, change)
  
 ```
 
-### Step 2 - Twitter Data
+## Step 2 - Twitter Data
 
-We will get Tweets about Microsoft (up to ten thousand of the most recent over the last two weeks) using the `search_tweets()` function from the **rtweet** package. Instructions to obtain access to Twitter data by creating a _token_ can be found at [CRAN on rtweet] (https://cran.r-project.org/web/packages/rtweet/vignettes/auth.html). After executing the commands, we will have a table of data called `MSFT_tweets` with the tweet and the date/time of the tweet. 
+We will get tweets referncing the words _Microsoft_ and _stock_ using the `search_tweets()` function from the **rtweet** package. Instructions to obtain access to Twitter data by creating a _token_ can be found at https://cran.r-project.org/web/packages/rtweet/vignettes/auth.html. After executing the commands, we will have a table of data called `MSFT_tweets` with the tweet text and the date/time that the tweet was originally created. 
 
-```{r Obtain-Social-Data-by-Keywords, message = FALSE, warning = FALSE}
+```{r Obtain-Social-Data-by-Keywords-SV, message = FALSE, warning = FALSE}
 
 twitter_token <- create_token(
    app = Sys.getenv("TWITTER_app"),
@@ -68,9 +67,9 @@ MSFT_tweets <- select(MSFT_tweets_all, created_at, text)
 
 ```
 
-### Step 3 - Create Scores for the Twitter Data
+## Step 3 - Create Scores for the Twitter Data
 
-Let's create a daily sentiment score for the tweets we pulled. The score will range from 5 (almost every reference to Microsoft is wonderful) to -5 (almost all the comments were negative). We will use
+Let's create a daily sentiment score for the tweets we pulled. The score will range from 5 (almost every reference is wonderful) to -5 (almost all the tweets are negative). We will use:
 
 * `unnest_tokens()` function from the **tidytext** package to break each tweet into individual words
 * `anti_join` from the **dplyr** package to remove the 'boring' words
@@ -79,7 +78,7 @@ Let's create a daily sentiment score for the tweets we pulled. The score will ra
 
 After running the commands below, we will have a table of data called `sentiment_data_by_date` that contains for each date an overall sentiment score.
 
-```{r Tokenize, message = FALSE, warning = FALSE}
+```{r Tokenize-SV, message = FALSE, warning = FALSE}
 
 MSFT_tweets_by_word <- unnest_tokens(tbl = MSFT_tweets, output = word, input = text) # break tweets into words
 MSFT_tweets_by_word_no_stop_words <- anti_join(x = MSFT_tweets_by_word, y = stop_words, by = c("word" = "word")) # remove common words
@@ -89,22 +88,22 @@ sentiment_data_by_date <- group_by(social_data_count_by_date_word, created_at_da
 
 ```
 
-### Step 4 - Combine the Microsoft Stock Price Data and Twitter Data
+## Step 4 - Combine the Microsoft Stock Price Data and Twitter Data
 
-Now combine the stock and Twitter data.
+Now we combine the stock data set and Twitter data set in a data set called `all_data`.
 
-```{r Combine Daily Data, message = FALSE, warning = FALSE}
+```{r Combine-Daily-Data-SV, message = FALSE, warning = FALSE}
 
 all_data <- inner_join(x = sentiment_data_by_date, y = MSFT_change, by = c("created_at_date" = "index"))
 
 ```
 
-### Step 5 - Create a Line Graph
+## Step 5 - Create a Line Graph
 
 Let's compare the changes in stock price for a particular date to the sentiment expressed on Twitter for the same date. We will use the `ggplot()` function from the **ggplot2** package.
 
 
-```{r Line-Graph, message = FALSE, warning = FALSE, fig.cap = 'Values over Time',  fig.align = 'center'}
+```{r Line-Graph-SV, message = FALSE, warning = FALSE, fig.cap = 'Values over Time',  fig.align = 'center'}
 
 ggplot(all_data, aes(x = created_at_date)) +
   geom_line(aes(y = scale(change), color="Microsoft"), lty = 1, size = 2) +
@@ -116,3 +115,5 @@ ggplot(all_data, aes(x = created_at_date)) +
   labs(title="Microsoft Stock Changes and Twitter Sentiment")
 
 ```
+
+<hr>

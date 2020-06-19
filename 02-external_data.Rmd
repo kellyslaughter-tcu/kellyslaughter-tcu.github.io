@@ -13,6 +13,15 @@ Other sources of data 'friendly' to R can be found at [ComputerWorld R Packages 
 
 Other general sources of data available through API's can be found at https://www.programmableweb.com/apis/directory.  
 
+## Primary Functions
+* `Quandl()` via the **Quandl** package: Retrieve commodity price data
+* `getSymbols()` via the **quantmod** package: Retrieve stock price data
+* `search_tweets()` via the **rtweet** package: Retrieve Twitter data
+* `get_reddit()` via the package **RedditExtractoR**: Retrieve Reddit data
+* `GET()` via the **httr** package (supporting cURL-like access to sites): Retrieve economic data
+* `fromJSON()` via the package **jsonlite**: Convert retrieved JSON data into a tibble
+<hr> 
+
 ## Financial Data
 <hr> 
 ### Commodity Prices
@@ -284,3 +293,5 @@ The first few rows of the BEA results are displayed in Table \@ref(tab:Economic-
 kable(head(BEA_tibble_unemployment_ins), caption = "First Few Rows of Economic Data Set")
 
 ```
+
+<hr>

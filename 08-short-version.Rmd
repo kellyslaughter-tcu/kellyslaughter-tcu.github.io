@@ -1,0 +1,99 @@
+# Short Version, No Social Media {#shortnm}
+
+<h5>[rmd version of file](08-short-version.Rmd)</h5>
+
+## Prep - Load the packages listed below. 
+
+```{r Packages-SV2, message = FALSE, warning = FALSE}
+
+library(tibble)    # for as_tibble() function
+library(quantmod)  # for getSymbols() function
+library(Quandl)    # for Quandl() function
+library(dplyr)     # for mutate function
+library(ggplot2)   # for ggplot() function
+
+```
+
+In this abbreviated version of our economic analysis, we will analysis via plots the closing prices of ExxonMobil and Chevron to Crude Oil futures. We use eight functions in all:
+
+* `getSymbols()` to obtain stock data
+* `as_tibble()` to change the data type
+* `mutate()` to add columns
+* `select()` to obtain a subset of data
+* `rename()` to rename columns
+* `Quandl()` to obtain commodity prices
+* `rbind()` to combine the data sets into one
+* `ggplot()` to create a plot
+
+## Step 1 - Stock Data
+
+Let's pull stock data on ExxonMobil and Chevron for the last month, i.e., from today (`Sys.Date()`) to thirty days ago (`Sys.Date() - 30`). The ExxonMobil trading symbol is **XOM** and the Chevron trading symbol is **CVX**.
+
+```{r Obtain-Stock-Data-SV2, message = FALSE, warning = FALSE}
+
+getSymbols(Symbols = c("XOM", "CVX"), src = 'yahoo', from = (Sys.Date() - 30), to = Sys.Date())
+
+```
+
+We now have stock price data in a variable called `XOM` and `CVX`. This variable is a data type called `xts`. We will convert the data into a type called a `tibble`. As the date in the `xts` is a row name rather than included in the data, we will use the `mutate()` function to take the row names from the `xts` object and create a data column called __date__ in our `tibble`. We will also use `mutate()` to add a column indicating the stock symbol, which will be useful when we later combine the data. We use the `select()` function to pull only the data columns we plan to use and the `rename()` to name the columns in a manner that will be consistent across our data sets.
+
+```{r Reformat-Stock-Data-SV2, message = FALSE, warning = FALSE}
+
+XOM_tibble <- as_tibble(XOM) 
+XOM_tibble <- mutate(XOM_tibble, Date = index(XOM))
+XOM_tibble <- mutate(XOM_tibble, Name = "ExxonMobil")
+XOM_tibble <- select(XOM_tibble, Date, XOM.Close, Name)
+XOM_tibble <- rename(XOM_tibble, Value = XOM.Close)
+
+CVX_tibble <- as_tibble(CVX)
+CVX_tibble <- mutate(CVX_tibble, Date = index(CVX))
+CVX_tibble <- mutate(CVX_tibble, Name = "Chevron")
+CVX_tibble <- select(CVX_tibble, Date, CVX.Close, Name)
+CVX_tibble <- rename(CVX_tibble, Value = CVX.Close)
+
+```
+
+## Step 2 - Energy data
+
+Create an account at [Quandl](https://www.quandl.com/sign-up) to obtain an API key (basically, a long string of letters and numbers). 
+
+We use the function `Quandl()` available after the **Quandl** package is loaded to obtain crude oil future prices from thirty days ago to the most recent date. Replace `Sys.getenv("QUANDL_KEY")` with the API string provided by Quandl. So your code might look like `api_key = "XSyMWPWENLzhDZ-4Y8pj"`. Make sure to use quotes around your key. 
+
+```{r Obtain-Gold-Data-SV2, message = FALSE}
+
+Crude_oil <- Quandl(code = "CHRIS/CME_QM1", start_date = (Sys.Date() - 30), api_key = Sys.getenv("QUANDL_KEY"))
+Crude_oil <- mutate(Crude_oil, Name = "Oil")
+Crude_oil <- select(Crude_oil, Date, Open, Name)
+Crude_oil <- rename(Crude_oil, Value = Open)
+
+```
+
+## Step 3 - Combine the Stock Price Data and energy data
+
+Now we combine the stock data set and commodity data set in a data set called `all_data`. As the three data sets have the same columns and column names (due to our previous work), we can use the `rbind()` function that in effect __stacks__ the data. 
+
+```{r Combine-Daily-Data-SV2, message = FALSE, warning = FALSE}
+
+all_data <- rbind(XOM_tibble, CVX_tibble, Crude_oil)
+
+```
+
+## Step 4 - Create a plot
+
+Let's compare the close of our stock prices on a particular date to the crude oil future openings. We will use the `ggplot()` function from the **ggplot2** package. Note the last command is setting a theme. You can find additional themes at https://ggplot2.tidyverse.org/reference/ggtheme.html. After generating the plot, you should interpret the plot and explain why it is interesting or how it supports or contradicts your "theories".
+
+```{r Line-Graph-SV2, message = FALSE, warning = FALSE, fig.cap = 'Values over Time',  fig.align = 'center'}
+
+ggplot(all_data, aes(x = Date)) +
+  geom_line(aes(y = Value, color = Name), size = 2) +
+  scale_x_date(date_breaks = "1 week", date_labels =  "%B %d") + # Format x axis: Break each week, show full month and day
+  scale_y_continuous(limits = c(0, max(all_data$Value))) +       # Start the y axis at 0 instead of minimum value
+  labs(title = "Energy Stock Values and Crude Oil Futures",
+       subtitle = paste0("from ", format(Sys.Date() - 30, "%B %d, %Y")), # dynamically include date in subtitle
+       caption = "Data from Yahoo and Quandl",
+       color = "Financial Instruments") +
+  theme_classic()
+  
+```
+
+<hr>

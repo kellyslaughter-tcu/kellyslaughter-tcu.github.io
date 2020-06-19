@@ -2,6 +2,12 @@
 
 <h5>[rmd version of file](04-combining_data.Rmd)</h5> 
 
+## Primary Functions
+* `inner_join()` via the **dplyr** package: Combine data sets
+* `mutate()` via the **dplyr** package: Create new columns of data
+* `select()` via the **dplyr** package: Select subset of variables for analysis
+<hr>
+
 The following data sets are now available:
 
 * **London_Gold_AM**: Daily price of gold
@@ -57,3 +63,4 @@ kable(head(final_data), caption = "Final Data Set")
 
 ```
 
+<hr>

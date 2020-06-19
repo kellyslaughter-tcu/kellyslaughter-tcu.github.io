@@ -87,3 +87,4 @@ Before the May 28 meeting:
         - You will need an API key as explained at https://apps.bea.gov/API/signup/index.cfm.
         - While there is an R package available for acquiring BEA data, it has not been updated in a couple of years and it appears that a few commands may not be working. So we will use a direct RESTful call (i.e., `GET`) via the **httr** package via `install.packages("httr")`. Also install the **jsonlite** package. This package supports the manipulation of external data received as JSON.
 
+<hr>

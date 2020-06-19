@@ -2,6 +2,10 @@
 
 <h5>[rmd version of file](05-visualization.Rmd)</h5> 
 
+## Primary Functions
+* `ggplot()` via the **ggplot2** package: Create plots
+<hr>
+
 While visualizations can be used for exploration and communication, for the competition, you will use plots to communicate, that is, share the relationships you have found in visual form. I did not find anything interesting between the price of gold, the daily spread of Tripwire prices, and the Twitter sentiment analysis. 
 
 We will use the most popular visualization package in R, **ggplot2**[@R-ggplot2], to create our graphs. Another popular R package used for visualizations is the **lattice** package. Base R also provides extensive plotting functions. `ggplot` uses themes as formatting templates (similar to a website's use of css). The British Broadcasting Company provides a theme that renders a professional look to the graphs. The theme can be found in the package **bbplot** [@R-bbplot].
@@ -133,3 +137,5 @@ ggplot(data = final_data, aes(x = scale(total_sentiment*n),
        subtitle = "Sentiment Intensify by Tripwire Change Intensity") 
 
 ```
+
+<hr>
